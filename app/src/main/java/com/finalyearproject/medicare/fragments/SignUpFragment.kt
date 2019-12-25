@@ -47,7 +47,7 @@ class SignUpFragment : Fragment() {
 
         signupButton.setOnClickListener {
             if (getValidData()) {
-                mDialog!!.showDialog("Please Wait...")
+                mDialog!!.show("Please Wait...")
                 registerNewUser()
             }
         }
@@ -59,7 +59,7 @@ class SignUpFragment : Fragment() {
         val call = requestInterface!!.userRegister(mNewUser)
         call.enqueue(object : retrofit2.Callback<ResponseModel> {
             override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
-                mDialog!!.dismissDialog()
+                mDialog!!.dismiss()
                 Log.d("SIGN UP", "Error: $t")
             }
 
@@ -71,7 +71,7 @@ class SignUpFragment : Fragment() {
                     Log.d("SIGN UP", "" + responseModel.responseSuccess + "")
                     if (responseModel.responseSuccess) {
 
-                        mDialog!!.dismissDialog()
+                        mDialog!!.dismiss()
                         Snackbar.make(view!!, responseModel.data!!, Snackbar.LENGTH_INDEFINITE)
                             .setAction("Log In") {
                                 (requireActivity() as AuthActivity).onBackPressed()
