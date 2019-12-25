@@ -66,22 +66,21 @@ class SignUpFragment : Fragment() {
             override fun onResponse(call: Call<ResponseModel>, response: Response<ResponseModel>) {
                 Log.d("SIGN UP", "" + response + "")
                 if (response.isSuccessful) {
-
+                    mDialog!!.dismiss()
                     val responseModel: ResponseModel = response.body()!!
-                    Log.d("SIGN UP", "" + responseModel.responseSuccess + "")
-                    if (responseModel.responseSuccess) {
-
-                        mDialog!!.dismiss()
-                        Snackbar.make(view!!, responseModel.data!!, Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Log In") {
-                                (requireActivity() as AuthActivity).onBackPressed()
-                            }.show()
-                    } else {
-
-                        Log.d("SIGNUP", "Demo: Called...")
+                    Log.d("SIGN UP", "" + responseModel.status + "")
+                    if (responseModel.status == 200) {
                         Snackbar.make(
                             view!!,
-                            "User already exists with this email or number. Please Login.",
+                            responseModel.message!!.toString(),
+                            Snackbar.LENGTH_INDEFINITE
+                        ).setAction("Log In") {
+                            (requireActivity() as AuthActivity).onBackPressed()
+                        }.show()
+                    } else {
+                        Snackbar.make(
+                            view!!,
+                            responseModel.message.toString(),
                             Snackbar.LENGTH_SHORT
                         ).show()
                     }
