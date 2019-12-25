@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ServiceBuilder {
 
-    const val URL = "http://"
+    const val URL = "https://medicare-888f7.appspot.com/"
 
     private val log = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 

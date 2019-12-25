@@ -25,6 +25,14 @@
         android:textSize="40sp"
         android:textStyle="bold" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/login_animation" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameErrorField"
         android:layout_width="match_parent"
