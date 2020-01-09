@@ -1,19 +1,41 @@
 package com.finalyearproject.medicare.fragments
 
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.activities.AuthActivity
+import com.finalyearproject.medicare.activities.AuthActivity.Companion.TAG
+import com.finalyearproject.medicare.activities.HomeActivity
+import com.finalyearproject.medicare.helpers.AppProgressDialog
+import com.finalyearproject.medicare.helpers.AppSharedPreference
+import com.finalyearproject.medicare.models.User
+import com.finalyearproject.medicare.retrofit.AuthService
+import com.finalyearproject.medicare.retrofit.ServiceBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_log_in.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 /**
  * A simple [Fragment] subclass.
  */
 class LogInFragment : Fragment() {
+
+    private var mRequestData: JsonObject? = JsonObject()
+    private var requestInterface: AuthService? = null
+    private var mDialog: AppProgressDialog? = null
+    lateinit var notificationToken: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,12 +48,90 @@ class LogInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mDialog = AppProgressDialog(context!!)
+        generateFirebaseNotificationToken()
+
         backImageButton.setOnClickListener {
             (requireActivity() as AuthActivity).onBackPressed()
         }
 
         loginButton.setOnClickListener {
-            usernameErrorField.error = "Error"
+            if (getValidData()) {
+                mDialog!!.show()
+                userValidation()
+            }
         }
+    }
+
+    private fun userValidation() {
+        requestInterface = ServiceBuilder.buildService(AuthService::class.java)
+        val requestCall = requestInterface!!.userLogIn(mRequestData!!)
+        requestCall.enqueue(object : Callback<User> {
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.d(TAG, "onFailure(): $t")
+                Toast.makeText(context!!, "Server Error!!", Toast.LENGTH_SHORT).show()
+                mDialog!!.dismiss()
+            }
+
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                mDialog!!.dismiss()
+                if (response.isSuccessful) {
+                    val responseData: User = response.body()!!
+                    Toast.makeText(context, responseData.toString(), Toast.LENGTH_SHORT).show()
+
+                    if (AppSharedPreference(context!!).saveString(
+                            "userId",
+                            responseData.uId!!
+                        )
+                    ) {
+                        startActivity(Intent(context, HomeActivity::class.java))
+                    } else {
+                        Toast.makeText(
+                            context!!,
+                            "Please try again...",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else if (response.code() == 401) {
+                    Snackbar.make(view!!, "Invalid Email or Password", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    private fun generateFirebaseNotificationToken() {
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Get new Instance ID token
+                    val token = task.result?.token
+                    notificationToken = token!!
+                    // Log and toast
+                    Log.d(TAG, token)
+                    Toast.makeText(context, token, Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun getValidData(): Boolean {
+        var isValid = false
+
+        when {
+            emailEditText.text!!.isEmpty() -> {
+                emailInputField.error = "Enter valid email"
+                emailInputField.requestFocus()
+            }
+            passwordEditText.text!!.isEmpty() -> {
+                passwordInputField.error = "Enter valid password"
+                passwordEditText.requestFocus()
+            }
+            else -> {
+                mRequestData!!.addProperty("email", emailEditText.text!!.toString())
+                mRequestData!!.addProperty("password", passwordEditText.text!!.toString())
+                mRequestData!!.addProperty("notificationToken", notificationToken)
+                isValid = true
+            }
+        }
+        return isValid
     }
 }

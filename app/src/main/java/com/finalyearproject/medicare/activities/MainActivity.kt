@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import com.finalyearproject.medicare.R
+import com.finalyearproject.medicare.helpers.AppSharedPreference
 
 
 class MainActivity : AppCompatActivity() {
@@ -14,8 +15,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         Handler().postDelayed(Runnable {
-            val intent = Intent(this@MainActivity, AuthActivity::class.java)
-            startActivity(intent)
+            if (!AppSharedPreference(this).getString("userId").equals("")) {
+                startActivity(Intent(this, HomeActivity::class.java))
+            } else {
+                val intent = Intent(this, AuthActivity::class.java)
+                startActivity(intent)
+            }
             finish()
         }, 3000)
     }
