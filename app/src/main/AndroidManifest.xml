@@ -14,13 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".activities.HomeActivity"></activity>
         <activity
-            android:name=".activities.AuthActivity"
+            android:name=".activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activities.AuthActivity"
+            android:theme="@style/AppTheme.CustomNoActionBar" />
+        <activity
             android:name=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.CustomNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

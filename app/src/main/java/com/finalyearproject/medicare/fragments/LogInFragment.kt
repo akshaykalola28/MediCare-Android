@@ -15,6 +15,7 @@ import com.finalyearproject.medicare.activities.AuthActivity.Companion.TAG
 import com.finalyearproject.medicare.activities.HomeActivity
 import com.finalyearproject.medicare.helpers.AppProgressDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
+import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.models.User
 import com.finalyearproject.medicare.retrofit.AuthService
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
@@ -77,14 +78,20 @@ class LogInFragment : Fragment() {
                 mDialog!!.dismiss()
                 if (response.isSuccessful) {
                     val responseData: User = response.body()!!
-                    Toast.makeText(context, responseData.toString(), Toast.LENGTH_SHORT).show()
 
                     if (AppSharedPreference(context!!).saveString(
-                            "userId",
+                            Constants.PREF_USER_ID,
                             responseData.uId!!
+                        ) && AppSharedPreference(context!!).saveString(
+                            Constants.PREF_USER_NAME,
+                            responseData.displayName!!
+                        ) && AppSharedPreference(context!!).saveString(
+                            Constants.PREF_API_TOKEN,
+                            responseData.token!!
                         )
                     ) {
                         startActivity(Intent(context, HomeActivity::class.java))
+                        activity!!.finish()
                     } else {
                         Toast.makeText(
                             context!!,
@@ -108,7 +115,6 @@ class LogInFragment : Fragment() {
                     notificationToken = token!!
                     // Log and toast
                     Log.d(TAG, token)
-                    Toast.makeText(context, token, Toast.LENGTH_SHORT).show()
                 }
             }
     }
