@@ -30,6 +30,7 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/mtrl_card_checked_layer_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_16sdp"
@@ -37,11 +38,24 @@
             app:cardElevation="@dimen/_4sdp"
             app:contentPadding="@dimen/_5sdp">
 
-            <TextView
-                android:id="@+id/text_hello_user_name"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/_15sdp" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ic_doctor_image"
+                    android:layout_width="@dimen/_48sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:src="@drawable/ic_doctor" />
+
+                <TextView
+                    android:id="@+id/text_hello_user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_toEndOf="@+id/ic_doctor_image"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </androidx.core.widget.NestedScrollView>
 

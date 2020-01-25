@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.finalyearproject.medicare.activities.HomeActivity">
+    tools:context="com.finalyearproject.medicare.activities.DoctorHomeActivity">
 
     <item
         android:id="@+id/action_logout"
@@ -10,8 +10,8 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_add_treatment"
+        android:id="@+id/action_request_report"
         android:orderInCategory="100"
-        android:title="Add Treatment"
+        android:title="Request Report"
         app:showAsAction="collapseActionView" />
 </menu>

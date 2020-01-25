@@ -8,13 +8,13 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.helpers.AppSharedPreference
-import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_doctor_home.*
 
-class HomeActivity : AppCompatActivity() {
+class DoctorHomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_doctor_home)
         setSupportActionBar(toolbar)
 
         initViews()
@@ -32,6 +32,10 @@ class HomeActivity : AppCompatActivity() {
                 finish()
                 true
             }
+            R.id.action_request_report -> {
+                startActivity(Intent(this, RequestReportActivity::class.java))
+                true
+            }
             else -> {
                 super.onOptionsItemSelected(item)
             }
@@ -40,7 +44,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu_home, menu)
+        inflater.inflate(R.menu.menu_doctor_home, menu)
         return true
     }
 }

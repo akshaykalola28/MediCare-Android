@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.activities.AuthActivity
 import com.finalyearproject.medicare.activities.AuthActivity.Companion.TAG
-import com.finalyearproject.medicare.activities.HomeActivity
+import com.finalyearproject.medicare.activities.DoctorHomeActivity
 import com.finalyearproject.medicare.helpers.AppProgressDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
@@ -79,28 +79,44 @@ class LogInFragment : Fragment() {
                 if (response.isSuccessful) {
                     val responseData: User = response.body()!!
 
-                    if (AppSharedPreference(context!!).saveString(
-                            Constants.PREF_USER_ID,
-                            responseData.uId!!
-                        ) && AppSharedPreference(context!!).saveString(
-                            Constants.PREF_USER_NAME,
-                            responseData.displayName!!
-                        ) && AppSharedPreference(context!!).saveString(
-                            Constants.PREF_API_TOKEN,
-                            responseData.token!!
-                        )
-                    ) {
-                        startActivity(Intent(context, HomeActivity::class.java))
-                        activity!!.finish()
-                    } else {
-                        Toast.makeText(
-                            context!!,
-                            "Please try again...",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    AppSharedPreference(context!!).saveString(
+                        Constants.PREF_USER_ID,
+                        responseData.uId!!
+                    )
+                    AppSharedPreference(context!!).saveString(
+                        Constants.PREF_USER_NAME,
+                        responseData.displayName!!
+                    )
+                    AppSharedPreference(context!!).saveString(
+                        Constants.PREF_API_TOKEN,
+                        responseData.token!!
+                    )
+                    AppSharedPreference(context!!).saveString(
+                        Constants.PREF_USER_TYPE,
+                        responseData.user_type!!
+                    )
+
+                    when (responseData.user_type) {
+                        Constants.USER_DOCTOR -> {
+                            startActivity(Intent(context, DoctorHomeActivity::class.java))
+                            activity!!.finish()
+                        }
+                        else -> {
+                            Toast.makeText(
+                                context,
+                                "Wait For Patient module Update.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 } else if (response.code() == 401) {
                     Snackbar.make(view!!, "Invalid Email or Password", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        context!!,
+                        "Please try again...",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         })

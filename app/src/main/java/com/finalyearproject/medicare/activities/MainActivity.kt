@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             if (AppSharedPreference(this).getString(Constants.PREF_USER_ID) != "") {
-                startActivity(Intent(this, HomeActivity::class.java))
+                startActivity(Intent(this, DoctorHomeActivity::class.java))
             } else {
                 val intent = Intent(this, AuthActivity::class.java)
                 startActivity(intent)
