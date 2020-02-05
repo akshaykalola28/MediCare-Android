@@ -1,10 +1,15 @@
 package com.finalyearproject.medicare.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
+import android.util.SparseArray
+import android.view.SurfaceHolder
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.finalyearproject.medicare.BuildConfig
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.helpers.AppProgressDialog
@@ -13,12 +18,17 @@ import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.models.ResponseModel
 import com.finalyearproject.medicare.retrofit.DoctorServiceApi
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
+import com.google.android.gms.vision.CameraSource
+import com.google.android.gms.vision.Detector
+import com.google.android.gms.vision.barcode.Barcode
+import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_request_report.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class RequestReportActivity : AppCompatActivity() {
 
@@ -26,12 +36,17 @@ class RequestReportActivity : AppCompatActivity() {
     lateinit var requestInterface: DoctorServiceApi
     lateinit var mDialog: AppProgressDialog
 
+    private var patientId: String? = ""
+
+    private var barcodeDetector: BarcodeDetector? = null
+    private var cameraSource: CameraSource? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_request_report)
 
         mDialog = AppProgressDialog(this)
-        setDebugData()
+        //setDebugData()
 
         request_report_button.setOnClickListener {
             if (getValidData()) {
@@ -39,12 +54,16 @@ class RequestReportActivity : AppCompatActivity() {
                 requestReportToServer()
             }
         }
+
+        scan_barcode_surface.setOnClickListener {
+            cameraSource!!.start(scan_barcode_surface!!.holder)
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun setDebugData() {
         if (BuildConfig.DEBUG) {
-            patient_email_edit_text.text =
+            patient_email_text.text =
                 Editable.Factory.getInstance().newEditable("KCFmNbBZe5YZQYHhc2CPHzLAgZl2")
         }
     }
@@ -80,25 +99,94 @@ class RequestReportActivity : AppCompatActivity() {
         })
     }
 
+    private fun initialiseDetectorsAndSources() {
+        Toast.makeText(applicationContext, "Barcode scanner started", Toast.LENGTH_SHORT)
+            .show()
+        barcodeDetector = BarcodeDetector.Builder(this)
+            .setBarcodeFormats(Barcode.ALL_FORMATS)
+            .build()
+        cameraSource = CameraSource.Builder(this, barcodeDetector)
+            .setRequestedPreviewSize(1080, 1080)
+            .setAutoFocusEnabled(true) //you should add this feature
+            .build()
+        scan_barcode_surface!!.holder.addCallback(object : SurfaceHolder.Callback {
+            override fun surfaceCreated(holder: SurfaceHolder) {
+                Toast.makeText(application, "Created.", Toast.LENGTH_SHORT).show()
+                try {
+                    if (ActivityCompat.checkSelfPermission(
+                            this@RequestReportActivity,
+                            Manifest.permission.CAMERA
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        //Toast.makeText(application, "Start.", Toast.LENGTH_SHORT).show()
+                        cameraSource!!.start(scan_barcode_surface!!.holder)
+                    } else {
+                        Toast.makeText(application, "Permission Required..", Toast.LENGTH_SHORT)
+                            .show()
+                        ActivityCompat.requestPermissions(
+                            this@RequestReportActivity,
+                            arrayOf(Manifest.permission.CAMERA),
+                            1000
+                        )
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun surfaceChanged(
+                holder: SurfaceHolder,
+                format: Int,
+                width: Int,
+                height: Int
+            ) {
+            }
+
+            override fun surfaceDestroyed(holder: SurfaceHolder) {
+                cameraSource!!.stop()
+            }
+        })
+        barcodeDetector!!.setProcessor(object : Detector.Processor<Barcode?> {
+            override fun release() {
+                Toast.makeText(
+                    applicationContext,
+                    "To prevent memory leaks barcode scanner has been stopped",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun receiveDetections(detections: Detector.Detections<Barcode?>) {
+                val barcodes: SparseArray<Barcode?>? = detections.detectedItems
+                if (barcodes!!.size() != 0) {
+                    patient_email_text.post {
+                        patient_email_text.text = Editable.Factory.getInstance()
+                            .newEditable(barcodes.valueAt(0)!!.displayValue)
+                        patientId = barcodes.valueAt(0)!!.displayValue
+                        cameraSource!!.stop()
+                    }
+                }
+            }
+        })
+    }
+
     private fun getValidData(): Boolean {
         return when {
-            patient_email_edit_text.text.toString().isEmpty() -> {
-                patient_email_input_layout.error = "Enter valid patient id."
-                patient_email_input_layout.requestFocus()
+            patientId!!.isEmpty() -> {
+                Toast.makeText(this, "Scan the Qr code of patient", Toast.LENGTH_SHORT).show()
                 false
             }
             report_title_edit_text.text.toString().isEmpty() -> {
-                report_title_input_layout.error = "Enter valid patient id."
+                report_title_input_layout.error = "Enter valid report title."
                 report_title_input_layout.requestFocus()
                 false
             }
             report_desc_edit_text.text.toString().isEmpty() -> {
-                report_desc_input_layout.error = "Enter valid patient id."
+                report_desc_input_layout.error = "Enter valid report descrption."
                 report_desc_input_layout.requestFocus()
                 false
             }
             laboratory_email_edit_text.text.toString().isEmpty() -> {
-                laboratory_email_input_layout.error = "Enter valid patient id."
+                laboratory_email_input_layout.error = "Enter valid laboratory email."
                 laboratory_email_input_layout.requestFocus()
                 false
             }
@@ -107,7 +195,7 @@ class RequestReportActivity : AppCompatActivity() {
                 false
             }
             else -> {
-                mRequestData.addProperty("patientId", patient_email_edit_text.text.toString())
+                mRequestData.addProperty("patientId", patientId)
                 mRequestData.addProperty(
                     "doctorId",
                     AppSharedPreference(this).getString(Constants.PREF_USER_ID)
@@ -127,5 +215,36 @@ class RequestReportActivity : AppCompatActivity() {
                 true
             }
         }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1000 -> {
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        //Toast.makeText(application, "Permission Granted", Toast.LENGTH_SHORT).show()
+                        cameraSource!!.start(scan_barcode_surface!!.holder)
+                    } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                        Toast.makeText(application, "Permission Denied.", Toast.LENGTH_SHORT).show()
+                        onBackPressed()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        cameraSource!!.release()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initialiseDetectorsAndSources()
     }
 }

@@ -4,6 +4,13 @@
     tools:context="com.finalyearproject.medicare.activities.DoctorHomeActivity">
 
     <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_user_profile"
+        android:orderInCategory="100"
+        android:title="Profile"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_logout"
         android:orderInCategory="100"
         android:title="Log Out"
