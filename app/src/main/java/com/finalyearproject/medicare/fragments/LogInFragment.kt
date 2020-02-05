@@ -13,9 +13,11 @@ import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.activities.AuthActivity
 import com.finalyearproject.medicare.activities.AuthActivity.Companion.TAG
 import com.finalyearproject.medicare.activities.DoctorHomeActivity
+import com.finalyearproject.medicare.activities.LabHomeActivity
 import com.finalyearproject.medicare.helpers.AppProgressDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
+import com.finalyearproject.medicare.managers.UserManagement
 import com.finalyearproject.medicare.models.User
 import com.finalyearproject.medicare.retrofit.AuthService
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
@@ -36,7 +38,7 @@ class LogInFragment : Fragment() {
     private var mRequestData: JsonObject? = JsonObject()
     private var requestInterface: AuthService? = null
     private var mDialog: AppProgressDialog? = null
-    lateinit var notificationToken: String
+    private lateinit var notificationToken: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,47 +78,40 @@ class LogInFragment : Fragment() {
 
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 mDialog!!.dismiss()
-                if (response.isSuccessful) {
-                    val responseData: User = response.body()!!
+                when {
+                    response.isSuccessful -> {
+                        val responseData: User = response.body()!!
 
-                    AppSharedPreference(context!!).saveString(
-                        Constants.PREF_USER_ID,
-                        responseData.uId!!
-                    )
-                    AppSharedPreference(context!!).saveString(
-                        Constants.PREF_USER_NAME,
-                        responseData.displayName!!
-                    )
-                    AppSharedPreference(context!!).saveString(
-                        Constants.PREF_API_TOKEN,
-                        responseData.token!!
-                    )
-                    AppSharedPreference(context!!).saveString(
-                        Constants.PREF_USER_TYPE,
-                        responseData.user_type!!
-                    )
+                        AppSharedPreference(context!!).saveString(
+                            Constants.PREF_USER_ID,
+                            responseData.uId!!
+                        )
+                        AppSharedPreference(context!!).saveString(
+                            Constants.PREF_USER_NAME,
+                            responseData.displayName!!
+                        )
+                        AppSharedPreference(context!!).saveString(
+                            Constants.PREF_API_TOKEN,
+                            responseData.token!!
+                        )
+                        AppSharedPreference(context!!).saveString(
+                            Constants.PREF_USER_TYPE,
+                            responseData.user_type!!
+                        )
 
-                    when (responseData.user_type) {
-                        Constants.USER_DOCTOR -> {
-                            startActivity(Intent(context, DoctorHomeActivity::class.java))
-                            activity!!.finish()
-                        }
-                        else -> {
-                            Toast.makeText(
-                                context,
-                                "Wait For Patient module Update.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        UserManagement.openHomeActivity(context!!, responseData.user_type!!)
                     }
-                } else if (response.code() == 401) {
-                    Snackbar.make(view!!, "Invalid Email or Password", Snackbar.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(
-                        context!!,
-                        "Please try again...",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    response.code() == 401 -> {
+                        Snackbar.make(view!!, "Invalid Email or Password", Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
+                    else -> {
+                        Toast.makeText(
+                            context!!,
+                            "Please try again...",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         })

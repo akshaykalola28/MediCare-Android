@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
+import com.finalyearproject.medicare.managers.UserManagement
 
 
 class MainActivity : AppCompatActivity() {
@@ -50,7 +51,11 @@ class MainActivity : AppCompatActivity() {
     private fun continueToApp() {
         Handler().postDelayed({
             if (AppSharedPreference(this).getString(Constants.PREF_USER_ID) != "") {
-                startActivity(Intent(this, DoctorHomeActivity::class.java))
+                UserManagement.openHomeActivity(
+                    this,
+                    AppSharedPreference(this).getString(Constants.PREF_USER_TYPE)
+                )
+
             } else {
                 val intent = Intent(this, AuthActivity::class.java)
                 startActivity(intent)

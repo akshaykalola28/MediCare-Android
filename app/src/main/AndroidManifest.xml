@@ -21,7 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".activities.LabHomeActivity"></activity>
+        <activity
+            android:name=".activities.LabHomeActivity"
+            android:label="Lab" />
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.RequestReportActivity" />
         <activity

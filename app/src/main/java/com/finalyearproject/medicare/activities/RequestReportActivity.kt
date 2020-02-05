@@ -69,7 +69,9 @@ class RequestReportActivity : AppCompatActivity() {
     }
 
     private fun requestReportToServer() {
-        requestInterface = ServiceBuilder.buildService(DoctorServiceApi::class.java)
+        requestInterface =
+            ServiceBuilder.getClient(AppSharedPreference(this).getString(Constants.PREF_API_TOKEN))
+                .create(DoctorServiceApi::class.java)
         val serverCall = requestInterface.requestReport(mRequestData)
         serverCall.enqueue(object : Callback<ResponseModel> {
             override fun onFailure(call: Call<ResponseModel>, t: Throwable) {

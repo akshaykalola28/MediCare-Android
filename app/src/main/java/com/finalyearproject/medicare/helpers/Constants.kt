@@ -13,4 +13,8 @@ object Constants {
     const val USER_PATIENT = "patient"
     const val USER_LABORATORY = "laboratory"
     const val USER_MEDICAL_STORE = "medical store"
+
+    //Reports status
+    const val STATUS_PENDING = "pending"
+    const val STATUS_DONE = "done"
 }

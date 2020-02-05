@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_8sdp"
+        app:cardElevation="@dimen/_5sdp"
+        app:contentPadding="@dimen/_5sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextReportItemTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Patient Id"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/report_patient_id_text"
+                        style="@style/TextReportItemData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="####"
+                        android:visibility="gone" />
+
+                    <TextView
+                        style="@style/TextReportItemTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Patient Name" />
+
+                    <TextView
+                        android:id="@+id/report_patient_name_text"
+                        style="@style/TextReportItemData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="####" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="end"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextReportItemTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Doctor Id"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/report_doctor_id_text"
+                        style="@style/TextReportItemData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="####"
+                        android:visibility="gone" />
+
+                    <TextView
+                        style="@style/TextReportItemTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Doctor Name" />
+
+                    <TextView
+                        android:id="@+id/report_doctor_name_text"
+                        style="@style/TextReportItemData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="####" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:layout_marginBottom="@dimen/_1sdp"
+                android:background="@color/colorAccent" />
+
+            <TextView
+                style="@style/TextReportItemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Report Id" />
+
+            <TextView
+                android:id="@+id/report_id_text"
+                style="@style/TextReportItemData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="###" />
+
+            <TextView
+                style="@style/TextReportItemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Report Request Date" />
+
+            <TextView
+                android:id="@+id/report_date_text"
+                style="@style/TextReportItemData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="###" />
+
+            <TextView
+                style="@style/TextReportItemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Report Title" />
+
+            <TextView
+                android:id="@+id/report_title_text"
+                style="@style/TextReportItemData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="###" />
+
+            <TextView
+                style="@style/TextReportItemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Report Description" />
+
+            <TextView
+                android:id="@+id/report_desc_text"
+                style="@style/TextReportItemData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="###" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:layout_marginBottom="@dimen/_1sdp"
+                android:background="@color/colorAccent" />
+
+            <TextView
+                style="@style/TextReportItemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status" />
+
+            <TextView
+                android:id="@+id/report_status_text"
+                style="@style/TextReportItemData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="###" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

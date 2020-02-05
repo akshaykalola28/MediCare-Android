@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_pending_reports"
+        android:orderInCategory="100"
+        android:title="Pending reports"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_done_reports"
+        android:orderInCategory="100"
+        android:title="Done Reports"
+        app:showAsAction="collapseActionView" />
+</menu>
