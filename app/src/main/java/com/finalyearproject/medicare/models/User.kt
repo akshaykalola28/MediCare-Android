@@ -11,5 +11,6 @@ data class User(
     @SerializedName("password") var password: String? = null,
     @SerializedName("displayName") var displayName: String? = null,
     @SerializedName("user_type") var user_type: String? = null,
-    @SerializedName("token") var token: String? = null
+    @SerializedName("token") var token: String? = null,
+    @SerializedName("profileUrl") var profileUrl: String? = null
 )

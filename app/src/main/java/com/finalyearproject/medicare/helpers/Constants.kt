@@ -7,6 +7,7 @@ object Constants {
     const val PREF_USER_NAME = "userName"
     const val PREF_API_TOKEN = "apiToken"
     const val PREF_USER_TYPE = "user_type"
+    const val PREF_USER_PROFILE_URL = "profileUrl"
 
     //Define User Type
     const val USER_DOCTOR = "doctor"

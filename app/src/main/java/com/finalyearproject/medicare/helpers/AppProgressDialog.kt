@@ -12,6 +12,7 @@ class AppProgressDialog(mContext: Context) {
 
     var view: View? = null
     var rootView: ViewGroup? = null
+    var isShowing: Boolean = false
 
     init {
         rootView = ((mContext as Activity).window.decorView.rootView!! as ViewGroup)
@@ -27,9 +28,17 @@ class AppProgressDialog(mContext: Context) {
         rootView!!.removeView(view)
         view!!.messageTextView.text = message
         rootView!!.addView(view)
+        isShowing = true
+    }
+
+    fun message(message: String) {
+        if (isShowing) {
+            view!!.messageTextView.text = message
+        }
     }
 
     fun dismiss() {
         rootView!!.removeView(view)
+        isShowing = false
     }
 }

@@ -2,12 +2,14 @@ package com.finalyearproject.medicare.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.UserManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.helpers.AppSharedPreference
+import com.finalyearproject.medicare.managers.UserManagement
 import kotlinx.android.synthetic.main.activity_doctor_home.*
 
 class DoctorHomeActivity : AppCompatActivity() {
@@ -27,9 +29,7 @@ class DoctorHomeActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                AppSharedPreference(this).clearSharedPref(AppSharedPreference.DEFAULT_SHARED_PREF)
-                startActivity(Intent(this, AuthActivity::class.java))
-                finish()
+                UserManagement.userLogOut(this)
                 true
             }
             R.id.action_request_report -> {

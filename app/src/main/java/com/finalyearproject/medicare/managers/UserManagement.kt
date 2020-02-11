@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import com.finalyearproject.medicare.activities.AuthActivity
 import com.finalyearproject.medicare.activities.DoctorHomeActivity
 import com.finalyearproject.medicare.activities.LabHomeActivity
+import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
 
 object UserManagement {
@@ -28,5 +30,11 @@ object UserManagement {
                 ).show()
             }
         }
+    }
+
+    fun userLogOut(context: Context) {
+        AppSharedPreference(context).clearSharedPref(AppSharedPreference.DEFAULT_SHARED_PREF)
+        context.startActivity(Intent(context, AuthActivity::class.java))
+        (context as Activity).finish()
     }
 }

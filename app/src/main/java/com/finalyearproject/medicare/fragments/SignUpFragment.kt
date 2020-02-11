@@ -1,32 +1,46 @@
 package com.finalyearproject.medicare.fragments
 
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.activities.AuthActivity
+import com.finalyearproject.medicare.activities.AuthActivity.Companion.TAG
 import com.finalyearproject.medicare.helpers.AppProgressDialog
+import com.finalyearproject.medicare.managers.UploadManagement
 import com.finalyearproject.medicare.models.ResponseModel
 import com.finalyearproject.medicare.models.User
 import com.finalyearproject.medicare.retrofit.AuthService
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import retrofit2.Call
 import retrofit2.Response
+import kotlin.math.round
+
 
 /**
  * A simple [Fragment] subclass.
  */
+@Suppress("DEPRECATION")
 class SignUpFragment : Fragment() {
 
     private val mNewUser = User()
     private var requestInterface: AuthService? = null
     var mDialog: AppProgressDialog? = null
+
+    private var profileImageLink: String? = null
+    private var selectedImageUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +57,13 @@ class SignUpFragment : Fragment() {
 
         backImageButton.setOnClickListener {
             (requireActivity() as AuthActivity).onBackPressed()
+        }
+
+        userProfileImage.setOnClickListener {
+            val i = Intent(
+                Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            )
+            startActivityForResult(i, 100)
         }
 
         signupButton.setOnClickListener {
@@ -84,6 +105,16 @@ class SignUpFragment : Fragment() {
                             Snackbar.LENGTH_SHORT
                         ).show()
                     }
+                } else if (response.code() == 409) {
+                    mDialog!!.dismiss()
+                    val gson = GsonBuilder().create()
+                    val resData: ResponseModel =
+                        gson.fromJson(response.errorBody()!!.string(), ResponseModel::class.java)
+                    Toast.makeText(
+                        context,
+                        resData.message.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         })
@@ -101,6 +132,12 @@ class SignUpFragment : Fragment() {
         confirmPasswordInputField.isErrorEnabled = false
 
         when {
+            selectedImageUri == null -> {
+                Toast.makeText(context, "Please select profile image", Toast.LENGTH_SHORT).show()
+            }
+            profileImageLink == null && selectedImageUri != null -> {
+                uploadProfileImage(selectedImageUri!!)
+            }
             firstNameEditText.text.toString() == "" -> {
                 firstNameInputField.error = "Enter first name"
                 firstNameInputField.requestFocus()
@@ -137,11 +174,44 @@ class SignUpFragment : Fragment() {
                 mNewUser.phoneNumber = mobileEditText.text.toString()
                 mNewUser.password = passwordEditText.text.toString()
                 mNewUser.user_type = "patient"
+                mNewUser.profileUrl = profileImageLink
 
                 isValid = true
             }
         }
 
         return isValid
+    }
+
+    private fun uploadProfileImage(uri: Uri) {
+        mDialog!!.show()
+        UploadManagement
+            .uploadImageFromUri(uri, UploadManagement.UPLOAD_PATH_PROFILE)
+            .addOnProgressListener {
+                val progress = (100.0 * it.bytesTransferred) / it.totalByteCount
+                mDialog!!.message("Upload is ${round(progress)}% done.")
+            }
+            .addOnSuccessListener {
+                mDialog!!.dismiss()
+                val result = it.metadata!!.reference!!.downloadUrl
+                result.addOnSuccessListener { uri ->
+                    profileImageLink = uri.toString()
+                    signupButton.performClick()
+                    Log.d(TAG, "Success $profileImageLink")
+                }
+            }.addOnFailureListener {
+                mDialog!!.dismiss()
+                Toast.makeText(context, "Upload task failed. Please try again.", Toast.LENGTH_SHORT)
+                    .show()
+                it.printStackTrace()
+            }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            selectedImageUri = data.data
+            userProfileImage.setImageURI(selectedImageUri)
+        }
     }
 }

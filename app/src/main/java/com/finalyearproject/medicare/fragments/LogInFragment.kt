@@ -1,7 +1,6 @@
 package com.finalyearproject.medicare.fragments
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,8 +11,6 @@ import androidx.fragment.app.Fragment
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.activities.AuthActivity
 import com.finalyearproject.medicare.activities.AuthActivity.Companion.TAG
-import com.finalyearproject.medicare.activities.DoctorHomeActivity
-import com.finalyearproject.medicare.activities.LabHomeActivity
 import com.finalyearproject.medicare.helpers.AppProgressDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
@@ -98,6 +95,11 @@ class LogInFragment : Fragment() {
                             Constants.PREF_USER_TYPE,
                             responseData.user_type!!
                         )
+                        if (responseData.profileUrl != null)
+                            AppSharedPreference(context!!).saveString(
+                                Constants.PREF_USER_PROFILE_URL,
+                                responseData.profileUrl!!
+                            )
 
                         UserManagement.openHomeActivity(context!!, responseData.user_type!!)
                     }
