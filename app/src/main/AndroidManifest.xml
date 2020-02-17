@@ -24,10 +24,17 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
+            android:name=".activities.PatientHomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activities.LabHomeActivity"
             android:label="Lab" />
-        <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".activities.RequestReportActivity" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:label="Profile" />
+        <activity
+            android:name=".activities.RequestReportActivity"
+            android:label="Request Report" />
         <activity
             android:name=".activities.DoctorHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -61,7 +68,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
 
         <meta-data
             android:name="preloaded_fonts"

@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.finalyearproject.medicare.activities.AuthActivity
 import com.finalyearproject.medicare.activities.DoctorHomeActivity
 import com.finalyearproject.medicare.activities.LabHomeActivity
+import com.finalyearproject.medicare.activities.PatientHomeActivity
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
 
@@ -20,6 +21,10 @@ object UserManagement {
             }
             Constants.USER_LABORATORY -> {
                 context.startActivity(Intent(context, LabHomeActivity::class.java))
+                (context as Activity).finish()
+            }
+            Constants.USER_PATIENT -> {
+                context.startActivity(Intent(context, PatientHomeActivity::class.java))
                 (context as Activity).finish()
             }
             else -> {

@@ -10,9 +10,9 @@ import kotlinx.android.synthetic.main.progress_dialog.view.*
 
 class AppProgressDialog(mContext: Context) {
 
-    var view: View? = null
-    var rootView: ViewGroup? = null
-    var isShowing: Boolean = false
+    private var view: View? = null
+    private var rootView: ViewGroup? = null
+    private var isShowing: Boolean = false
 
     init {
         rootView = ((mContext as Activity).window.decorView.rootView!! as ViewGroup)

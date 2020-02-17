@@ -95,11 +95,10 @@ class LogInFragment : Fragment() {
                             Constants.PREF_USER_TYPE,
                             responseData.user_type!!
                         )
-                        if (responseData.profileUrl != null)
-                            AppSharedPreference(context!!).saveString(
-                                Constants.PREF_USER_PROFILE_URL,
-                                responseData.profileUrl!!
-                            )
+                        AppSharedPreference(context!!).saveString(
+                            Constants.PREF_USER_EMAIL,
+                            responseData.email!!
+                        )
 
                         UserManagement.openHomeActivity(context!!, responseData.user_type!!)
                     }
