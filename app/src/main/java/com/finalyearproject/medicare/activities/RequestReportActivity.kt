@@ -56,6 +56,7 @@ class RequestReportActivity : AppCompatActivity() {
         }
 
         scan_barcode_surface.setOnClickListener {
+            scanningView.startAnimation()
             cameraSource!!.start(scan_barcode_surface!!.holder)
         }
     }
@@ -165,6 +166,7 @@ class RequestReportActivity : AppCompatActivity() {
                             .newEditable(barcodes.valueAt(0)!!.displayValue)
                         patientId = barcodes.valueAt(0)!!.displayValue
                         cameraSource!!.stop()
+                        scanningView.stopAnimation()
                     }
                 }
             }
