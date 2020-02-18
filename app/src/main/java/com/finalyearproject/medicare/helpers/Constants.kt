@@ -18,4 +18,8 @@ object Constants {
     //Reports status
     const val STATUS_PENDING = "pending"
     const val STATUS_DONE = "done"
+
+    //Database Constants
+    const val DB_EMAIL = "email"
+    const val DB_USER_ID = "uid"
 }

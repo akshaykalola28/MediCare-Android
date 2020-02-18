@@ -16,6 +16,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/account_header_text"
             style="@style/headerText"
             android:layout_marginBottom="20dp"
             android:text="Account Info" />
@@ -40,7 +41,9 @@
         </RelativeLayout>
 
 
-        <RelativeLayout style="@style/profileDetailsLayout">
+        <RelativeLayout
+            android:id="@+id/mobile_view"
+            style="@style/profileDetailsLayout">
 
             <ImageView
                 android:id="@+id/mobileImageView"
@@ -60,7 +63,9 @@
         </RelativeLayout>
 
 
-        <RelativeLayout style="@style/profileDetailsLayout">
+        <RelativeLayout
+            android:id="@+id/email_view"
+            style="@style/profileDetailsLayout">
 
             <ImageView
                 android:id="@+id/emailImageView"
@@ -76,7 +81,26 @@
                 android:id="@+id/user_email_text"
                 style="@style/profileDetailsTextMain"
                 android:layout_toRightOf="@id/emailImageView"
-                android:text="developer@appsnipp.com" />
+                android:text="developer@medicare.com" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/profileDetailsLayout">
+
+            <ImageView
+                android:id="@+id/typeImageView"
+                style="@style/profileDetailsImage"
+                android:src="@drawable/ic_user_id" />
+
+            <TextView
+                style="@style/profileDetailsMiniText"
+                android:layout_toRightOf="@id/typeImageView"
+                android:text="User Type" />
+
+            <TextView
+                android:id="@+id/user_type_text"
+                style="@style/profileDetailsTextMain"
+                android:layout_toRightOf="@id/typeImageView"
+                android:text="developer" />
         </RelativeLayout>
 
     </LinearLayout>

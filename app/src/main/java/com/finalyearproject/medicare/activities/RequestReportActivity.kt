@@ -16,12 +16,15 @@ import com.finalyearproject.medicare.helpers.AppProgressDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.models.ResponseModel
+import com.finalyearproject.medicare.models.User
+import com.finalyearproject.medicare.retrofit.AuthService
 import com.finalyearproject.medicare.retrofit.DoctorServiceApi
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_request_report.*
@@ -34,6 +37,7 @@ class RequestReportActivity : AppCompatActivity() {
 
     var mRequestData: JsonObject = JsonObject()
     lateinit var requestInterface: DoctorServiceApi
+    lateinit var userRequestInterface: AuthService
     lateinit var mDialog: AppProgressDialog
 
     private var patientId: String? = ""
@@ -50,7 +54,7 @@ class RequestReportActivity : AppCompatActivity() {
 
         request_report_button.setOnClickListener {
             if (getValidData()) {
-                mDialog.show()
+                mDialog.show("Report Requesting...")
                 requestReportToServer()
             }
         }
@@ -103,8 +107,7 @@ class RequestReportActivity : AppCompatActivity() {
     }
 
     private fun initialiseDetectorsAndSources() {
-        Toast.makeText(applicationContext, "Barcode scanner started", Toast.LENGTH_SHORT)
-            .show()
+        //Toast.makeText(applicationContext, "Barcode scanner started", Toast.LENGTH_SHORT).show()
         barcodeDetector = BarcodeDetector.Builder(this)
             .setBarcodeFormats(Barcode.ALL_FORMATS)
             .build()
@@ -114,7 +117,7 @@ class RequestReportActivity : AppCompatActivity() {
             .build()
         scan_barcode_surface!!.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(holder: SurfaceHolder) {
-                Toast.makeText(application, "Created.", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(application, "Created.", Toast.LENGTH_SHORT).show()
                 try {
                     if (ActivityCompat.checkSelfPermission(
                             this@RequestReportActivity,
@@ -167,6 +170,7 @@ class RequestReportActivity : AppCompatActivity() {
                         patientId = barcodes.valueAt(0)!!.displayValue
                         cameraSource!!.stop()
                         scanningView.stopAnimation()
+                        getUserData()
                     }
                 }
             }
@@ -195,7 +199,7 @@ class RequestReportActivity : AppCompatActivity() {
                 false
             }
             AppSharedPreference(this).getString(Constants.PREF_USER_TYPE) != "doctor" -> {
-                Toast.makeText(this, "You're not Doctor.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "You're not a Doctor.", Toast.LENGTH_SHORT).show()
                 false
             }
             else -> {
@@ -219,6 +223,54 @@ class RequestReportActivity : AppCompatActivity() {
                 true
             }
         }
+    }
+
+    private fun getUserData() {
+        mDialog.show("Getting Patient Info...")
+        userRequestInterface =
+            ServiceBuilder.getClient(AppSharedPreference(this).getString(Constants.PREF_API_TOKEN))
+                .create(AuthService::class.java)
+        val requestCall =
+            userRequestInterface.getUserData(
+                Constants.DB_EMAIL,
+                AppSharedPreference(this).getString(Constants.PREF_USER_EMAIL)
+            )
+        requestCall.enqueue(object : Callback<User> {
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                mDialog.dismiss()
+                t.printStackTrace()
+                Toast.makeText(
+                    this@RequestReportActivity,
+                    "Please try again...",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                mDialog.dismiss()
+                when {
+                    response.isSuccessful -> {
+                        val responseData: User = response.body()!!
+                        user_name_text.text = responseData.displayName
+                    }
+                    response.code() == 401 -> {
+                        Snackbar.make(
+                            this@RequestReportActivity.currentFocus!!,
+                            "Something is wrong.",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                    else -> {
+                        Toast.makeText(
+                            this@RequestReportActivity,
+                            "Please try again...",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        onBackPressed()
+                    }
+                }
+            }
+        })
     }
 
     override fun onRequestPermissionsResult(

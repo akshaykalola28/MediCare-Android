@@ -17,6 +17,7 @@ interface AuthService {
     @POST("user/login/")
     fun userLogIn(@Body requestData: JsonObject): Call<User>
 
-    @GET("user/{user_id}")
-    fun getUserData(@Path("user_id") userId: String): Call<User>
+    //key and value pair like {email,''} or {uid,''}
+    @GET("user/{key}/{value}")
+    fun getUserData(@Path("key") key: String, @Path("value") value: String): Call<User>
 }

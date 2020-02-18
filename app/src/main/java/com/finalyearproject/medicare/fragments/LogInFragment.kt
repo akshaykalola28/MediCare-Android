@@ -14,6 +14,7 @@ import com.finalyearproject.medicare.activities.AuthActivity.Companion.TAG
 import com.finalyearproject.medicare.helpers.AppProgressDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
+import com.finalyearproject.medicare.helpers.hideKeyboard
 import com.finalyearproject.medicare.managers.UserManagement
 import com.finalyearproject.medicare.models.User
 import com.finalyearproject.medicare.retrofit.AuthService
@@ -105,6 +106,7 @@ class LogInFragment : Fragment() {
                     response.code() == 401 -> {
                         Snackbar.make(view!!, "Invalid Email or Password", Snackbar.LENGTH_SHORT)
                             .show()
+                        hideKeyboard(activity!!)
                     }
                     else -> {
                         Toast.makeText(

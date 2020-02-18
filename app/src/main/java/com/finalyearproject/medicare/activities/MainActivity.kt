@@ -37,10 +37,14 @@ class MainActivity : AppCompatActivity() {
             1000 -> {
                 if (grantResults.isNotEmpty()) {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(application, "Permission Granted", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(application, "Permission Granted", Toast.LENGTH_SHORT).show()
                         continueToApp()
                     } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                        Toast.makeText(application, "Permission Denied", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            application,
+                            "Permission Denied. You might get some trouble while using the application.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         continueToApp()
                     }
                 }
@@ -55,7 +59,6 @@ class MainActivity : AppCompatActivity() {
                     this,
                     AppSharedPreference(this).getString(Constants.PREF_USER_TYPE)
                 )
-
             } else {
                 val intent = Intent(this, AuthActivity::class.java)
                 startActivity(intent)

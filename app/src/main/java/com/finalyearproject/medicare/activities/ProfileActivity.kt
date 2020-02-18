@@ -11,6 +11,7 @@ import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.models.User
 import com.finalyearproject.medicare.retrofit.AuthService
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
@@ -45,7 +46,10 @@ class ProfileActivity : AppCompatActivity() {
             ServiceBuilder.getClient(AppSharedPreference(this).getString(Constants.PREF_API_TOKEN))
                 .create(AuthService::class.java)
         val requestCall =
-            requestInterface!!.getUserData(AppSharedPreference(this).getString(Constants.PREF_USER_EMAIL))
+            requestInterface!!.getUserData(
+                Constants.DB_EMAIL,
+                AppSharedPreference(this).getString(Constants.PREF_USER_EMAIL)
+            )
         requestCall.enqueue(object : Callback<User> {
             override fun onFailure(call: Call<User>, t: Throwable) {
                 mDialog.dismiss()
@@ -64,6 +68,7 @@ class ProfileActivity : AppCompatActivity() {
                     response.isSuccessful -> {
                         val responseData: User = response.body()!!
 
+                        account_header_text.visibility = View.VISIBLE
                         user_name_text.text = responseData.displayName
                         user_number_text.text = responseData.phoneNumber
                         user_email_text.text = responseData.email
@@ -73,10 +78,14 @@ class ProfileActivity : AppCompatActivity() {
                                 .load(responseData.profileUrl)
                                 .into(profile_image)
                         }
+                        user_type_text.text = responseData.user_type
                     }
                     response.code() == 401 -> {
-                        /*Snackbar.make(, "Invalid Email or Password", Snackbar.LENGTH_SHORT)
-                            .show()*/
+                        Snackbar.make(
+                            this@ProfileActivity.currentFocus!!,
+                            "Something is wrong.",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                     else -> {
                         Toast.makeText(
@@ -84,7 +93,6 @@ class ProfileActivity : AppCompatActivity() {
                             "Please try again...",
                             Toast.LENGTH_SHORT
                         ).show()
-                        onBackPressed()
                     }
                 }
             }
