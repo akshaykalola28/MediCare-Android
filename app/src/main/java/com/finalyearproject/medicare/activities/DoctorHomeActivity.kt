@@ -2,7 +2,6 @@ package com.finalyearproject.medicare.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.UserManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -24,6 +23,10 @@ class DoctorHomeActivity : AppCompatActivity() {
 
     private fun initViews() {
         text_hello_user_name.text = "Hello, ${AppSharedPreference(this).getString("userName")}"
+
+        request_report_button.setOnClickListener {
+            startActivity(Intent(this, RequestReportActivity::class.java))
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

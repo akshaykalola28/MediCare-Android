@@ -41,9 +41,7 @@
         </RelativeLayout>
 
 
-        <RelativeLayout
-            android:id="@+id/mobile_view"
-            style="@style/profileDetailsLayout">
+        <RelativeLayout style="@style/profileDetailsLayout">
 
             <ImageView
                 android:id="@+id/mobileImageView"
@@ -63,9 +61,7 @@
         </RelativeLayout>
 
 
-        <RelativeLayout
-            android:id="@+id/email_view"
-            style="@style/profileDetailsLayout">
+        <RelativeLayout style="@style/profileDetailsLayout">
 
             <ImageView
                 android:id="@+id/emailImageView"

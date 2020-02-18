@@ -1,4 +1,4 @@
 <resources>
-    <dimen name="app_bar_height">@dimen/_180sdp</dimen>
+    <dimen name="app_bar_height">@dimen/_100sdp</dimen>
     <dimen name="headerTextSize">28sp</dimen>
 </resources>

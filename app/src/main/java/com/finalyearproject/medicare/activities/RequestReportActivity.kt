@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.widget.Toast
@@ -153,11 +154,12 @@ class RequestReportActivity : AppCompatActivity() {
         })
         barcodeDetector!!.setProcessor(object : Detector.Processor<Barcode?> {
             override fun release() {
-                Toast.makeText(
+                /*Toast.makeText(
                     applicationContext,
                     "To prevent memory leaks barcode scanner has been stopped",
                     Toast.LENGTH_SHORT
-                ).show()
+                ).show()*/
+                Log.d("SCANNER", "To prevent memory leaks barcode scanner has been stopped")
             }
 
             override fun receiveDetections(detections: Detector.Detections<Barcode?>) {
