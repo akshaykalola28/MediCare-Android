@@ -35,7 +35,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_toEndOf="@id/loadingAnimationLottie"
-                android:text="Please Wait..."
+                android:text="@string/please_wait"
                 android:textSize="16sp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

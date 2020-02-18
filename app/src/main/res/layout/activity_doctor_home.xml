@@ -95,7 +95,7 @@
                         android:letterSpacing="0.1"
                         android:paddingStart="@dimen/_24sdp"
                         android:paddingEnd="@dimen/_24sdp"
-                        android:text="Request Report"
+                        android:text="@string/request_report"
                         android:textColor="#fff"
                         android:textStyle="bold" />
                 </RelativeLayout>

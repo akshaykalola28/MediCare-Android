@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/header_image"
             android:layout_centerHorizontal="true"
-            android:text="Welcome to MediCare"
+            android:text="@string/welcome_to_medicare"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <RelativeLayout
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/button_style_login"
-                android:text="Log In"
+                android:text="@string/log_in"
                 android:textColor="#000" />
 
             <Button
@@ -48,7 +48,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_common_style"
-                android:text="Sign Up"
+                android:text="@string/sign_up"
                 android:textColor="#FFF" />
         </RelativeLayout>
     </RelativeLayout>

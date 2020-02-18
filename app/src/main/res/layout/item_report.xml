@@ -32,7 +32,7 @@
                         style="@style/TextReportItemTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Patient Id"
+                        android:text="@string/patient_id"
                         android:visibility="gone" />
 
                     <TextView
@@ -40,36 +40,36 @@
                         style="@style/TextReportItemData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="####"
+                        android:text="@string/dummy"
                         android:visibility="gone" />
 
                     <TextView
                         style="@style/TextReportItemTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Patient Name" />
+                        android:text="@string/patient_name" />
 
                     <TextView
                         android:id="@+id/report_patient_name_text"
                         style="@style/TextReportItemData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="####" />
+                        android:text="@string/dummy" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:gravity="end"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
+                    android:gravity="end"
                     android:orientation="vertical">
 
                     <TextView
                         style="@style/TextReportItemTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Doctor Id"
+                        android:text="@string/doctor_id"
                         android:visibility="gone" />
 
                     <TextView
@@ -77,21 +77,21 @@
                         style="@style/TextReportItemData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="####"
+                        android:text="@string/dummy"
                         android:visibility="gone" />
 
                     <TextView
                         style="@style/TextReportItemTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Doctor Name" />
+                        android:text="@string/doctor_name" />
 
                     <TextView
                         android:id="@+id/report_doctor_name_text"
                         style="@style/TextReportItemData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="####" />
+                        android:text="@string/dummy" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -107,53 +107,53 @@
                 style="@style/TextReportItemTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Report Id" />
+                android:text="@string/report_id" />
 
             <TextView
                 android:id="@+id/report_id_text"
                 style="@style/TextReportItemData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="###" />
+                android:text="@string/dummy" />
 
             <TextView
                 style="@style/TextReportItemTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Report Request Date" />
+                android:text="@string/report_request_date" />
 
             <TextView
                 android:id="@+id/report_date_text"
                 style="@style/TextReportItemData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="###" />
+                android:text="@string/dummy" />
 
             <TextView
                 style="@style/TextReportItemTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Report Title" />
+                android:text="@string/report_title" />
 
             <TextView
                 android:id="@+id/report_title_text"
                 style="@style/TextReportItemData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="###" />
+                android:text="@string/dummy" />
 
             <TextView
                 style="@style/TextReportItemTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Report Description" />
+                android:text="@string/report_description" />
 
             <TextView
                 android:id="@+id/report_desc_text"
                 style="@style/TextReportItemData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="###" />
+                android:text="@string/dummy" />
 
             <View
                 android:layout_width="match_parent"
@@ -166,14 +166,14 @@
                 style="@style/TextReportItemTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Status" />
+                android:text="@string/status" />
 
             <TextView
                 android:id="@+id/report_status_text"
                 style="@style/TextReportItemData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="###" />
+                android:text="@string/dummy" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

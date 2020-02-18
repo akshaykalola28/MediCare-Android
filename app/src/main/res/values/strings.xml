@@ -1,5 +1,27 @@
 <resources>
     <string name="app_name">MediCare</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="report_title">Report Title</string>
+    <string name="report_description">Report Description</string>
+    <string name="laboratory_email">Laboratory Email</string>
+    <string name="request_report">Request Report</string>
+    <string name="name">Name</string>
+    <string name="patient_id">Patient Id</string>
+    <string name="welcome_to_medicare">Welcome to MediCare</string>
+    <string name="log_in">Log In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="nick_name">Nick Name</string>
+    <string name="email">Email</string>
+    <string name="mobile_no">Mobile No.</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="dummy">####</string>
+    <string name="patient_name">Patient Name</string>
+    <string name="doctor_id">Doctor Id</string>
+    <string name="doctor_name">Doctor Name</string>
+    <string name="report_id">Report Id</string>
+    <string name="report_request_date">Report Request Date</string>
+    <string name="status">Status</string>
+    <string name="please_wait">Please Wait…</string>
 </resources>

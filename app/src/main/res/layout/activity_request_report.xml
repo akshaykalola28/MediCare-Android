@@ -87,21 +87,6 @@
                 android:background="#000" />
         </RelativeLayout>
 
-        <!--<com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
-            android:layout_marginBottom="@dimen/_8sdp">
-
-            <TextView
-                android:id="@+id/patient_email_text"
-                style="@style/Widget.AppCompat.EditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Patient Id" />
-        </com.google.android.material.textfield.TextInputLayout>-->
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -116,14 +101,13 @@
 
             <TextView
                 style="@style/profileDetailsMiniText"
-                android:layout_toRightOf="@id/nameImageView"
-                android:text="Name" />
+                android:layout_toEndOf="@id/nameImageView"
+                android:text="@string/name" />
 
             <TextView
                 android:id="@+id/user_name_text"
                 style="@style/profileDetailsTextMain"
-                android:layout_toRightOf="@id/nameImageView"
-                android:text="developer" />
+                android:layout_toEndOf="@id/nameImageView" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -140,14 +124,13 @@
 
             <TextView
                 style="@style/profileDetailsMiniText"
-                android:layout_toRightOf="@id/idImageView"
-                android:text="Patient Id" />
+                android:layout_toEndOf="@id/idImageView"
+                android:text="@string/patient_id" />
 
             <TextView
                 android:id="@+id/patient_email_text"
                 style="@style/profileDetailsTextMain"
-                android:layout_toRightOf="@id/idImageView"
-                android:text="developer" />
+                android:layout_toEndOf="@id/idImageView" />
         </RelativeLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -157,7 +140,7 @@
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginEnd="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_8sdp"
-            android:hint="Report Title">
+            android:hint="@string/report_title">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/report_title_edit_text"
@@ -173,7 +156,7 @@
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginEnd="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_8sdp"
-            android:hint="Report Description"
+            android:hint="@string/report_description"
             app:counterEnabled="true"
             app:counterMaxLength="50">
 
@@ -191,7 +174,7 @@
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginEnd="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_8sdp"
-            android:hint="Laboratory Email">
+            android:hint="@string/laboratory_email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/laboratory_email_edit_text"
@@ -209,6 +192,6 @@
             android:layout_marginEnd="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_16sdp"
             android:background="@drawable/button_common_style"
-            android:text="Request Report" />
+            android:text="@string/request_report" />
     </LinearLayout>
 </ScrollView>
