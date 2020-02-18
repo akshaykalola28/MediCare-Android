@@ -69,7 +69,7 @@ class ProfileActivity : AppCompatActivity() {
                         val responseData: User = response.body()!!
 
                         account_header_text.visibility = View.VISIBLE
-                        user_name_text.text = responseData.displayName
+                        user_name_text.text = "${responseData.firstName} ${responseData.lastName}"
                         user_number_text.text = responseData.phoneNumber
                         user_email_text.text = responseData.email
                         if (responseData.profileUrl != "") {

@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.activity_request_report.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.IOException
 
 class RequestReportActivity : AppCompatActivity() {
 
@@ -135,7 +134,7 @@ class RequestReportActivity : AppCompatActivity() {
                             1000
                         )
                     }
-                } catch (e: IOException) {
+                } catch (e: Throwable) {
                     e.printStackTrace()
                 }
             }
@@ -170,7 +169,7 @@ class RequestReportActivity : AppCompatActivity() {
                         patientId = barcodes.valueAt(0)!!.displayValue
                         cameraSource!!.stop()
                         scanningView.stopAnimation()
-                        getUserData()
+                        getUserData(patientId!!)
                     }
                 }
             }
@@ -225,16 +224,12 @@ class RequestReportActivity : AppCompatActivity() {
         }
     }
 
-    private fun getUserData() {
+    private fun getUserData(id: String) {
         mDialog.show("Getting Patient Info...")
         userRequestInterface =
             ServiceBuilder.getClient(AppSharedPreference(this).getString(Constants.PREF_API_TOKEN))
                 .create(AuthService::class.java)
-        val requestCall =
-            userRequestInterface.getUserData(
-                Constants.DB_EMAIL,
-                AppSharedPreference(this).getString(Constants.PREF_USER_EMAIL)
-            )
+        val requestCall = userRequestInterface.getUserData(Constants.DB_USER_ID, id)
         requestCall.enqueue(object : Callback<User> {
             override fun onFailure(call: Call<User>, t: Throwable) {
                 mDialog.dismiss()
@@ -251,7 +246,7 @@ class RequestReportActivity : AppCompatActivity() {
                 when {
                     response.isSuccessful -> {
                         val responseData: User = response.body()!!
-                        user_name_text.text = responseData.displayName
+                        user_name_text.text = "${responseData.firstName} ${responseData.lastName}"
                     }
                     response.code() == 401 -> {
                         Snackbar.make(
