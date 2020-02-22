@@ -19,13 +19,13 @@ import com.finalyearproject.medicare.adapters.ReportAdapter
 import com.finalyearproject.medicare.helpers.AppProgressDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
+import com.finalyearproject.medicare.helpers.responseErrorHandlerOfCode400
 import com.finalyearproject.medicare.managers.UploadManagement
 import com.finalyearproject.medicare.managers.UserManagement
 import com.finalyearproject.medicare.models.ReportModel
 import com.finalyearproject.medicare.models.ResponseModel
 import com.finalyearproject.medicare.retrofit.LabServiceApi
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_lab_home.*
 import retrofit2.Call
@@ -99,6 +99,10 @@ class LabHomeActivity : AppCompatActivity(), ReportAdapter.ReportCallbackInterfa
             }
             R.id.action_logout -> {
                 UserManagement.userLogOut(this)
+                true
+            }
+            R.id.action_profile -> {
+                startActivity(Intent(this, ProfileActivity::class.java))
                 true
             }
             else -> {
@@ -231,14 +235,10 @@ class LabHomeActivity : AppCompatActivity(), ReportAdapter.ReportCallbackInterfa
                     //For update report list
                     getPendingReports(Constants.STATUS_PENDING)
                 } else if (response.code() == 401) {
-                    val gson = GsonBuilder().create()
-                    val resData: ResponseModel =
-                        gson.fromJson(response.errorBody()!!.string(), ResponseModel::class.java)
-                    Toast.makeText(
+                    responseErrorHandlerOfCode400(
                         this@LabHomeActivity,
-                        resData.message.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        response.errorBody()!!.string()
+                    )
                 }
             }
         })

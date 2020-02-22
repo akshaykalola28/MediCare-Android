@@ -252,10 +252,13 @@ class RequestReportActivity : AppCompatActivity() {
                     }
                     response.code() == 401 -> {
                         Snackbar.make(
-                            this@RequestReportActivity.currentFocus!!,
-                            "Something is wrong.",
+                            window.decorView.findViewById(android.R.id.content),
+                            "User not Found or Invalid QR code.",
                             Snackbar.LENGTH_SHORT
                         ).show()
+                        //Restart QR scanner
+                        scanningView.startAnimation()
+                        cameraSource!!.start(scan_barcode_surface!!.holder)
                     }
                     else -> {
                         Toast.makeText(

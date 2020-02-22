@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_user_profile"
+        android:orderInCategory="100"
+        android:title="Profile"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_pending_reports"
         android:orderInCategory="100"
         android:title="Pending reports"

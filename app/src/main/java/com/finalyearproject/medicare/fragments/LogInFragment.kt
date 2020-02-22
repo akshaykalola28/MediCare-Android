@@ -86,7 +86,7 @@ class LogInFragment : Fragment() {
                         )
                         AppSharedPreference(context!!).saveString(
                             Constants.PREF_USER_NAME,
-                            responseData.displayName!!
+                            "${responseData.firstName} ${responseData.lastName}"
                         )
                         AppSharedPreference(context!!).saveString(
                             Constants.PREF_API_TOKEN,

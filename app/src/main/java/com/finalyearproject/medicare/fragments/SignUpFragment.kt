@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.finalyearproject.medicare.R
@@ -41,6 +42,14 @@ class SignUpFragment : Fragment() {
 
     private var profileImageLink: String? = null
     private var selectedImageUri: Uri? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        //This should be add for scroll fragment while keybard is opens.
+        activity!!.window
+            .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -175,6 +184,8 @@ class SignUpFragment : Fragment() {
                 mNewUser.password = passwordEditText.text.toString()
                 mNewUser.user_type = "patient"
                 mNewUser.profileUrl = profileImageLink
+
+                Log.d("User Data", mNewUser.toString())
 
                 isValid = true
             }
