@@ -24,7 +24,9 @@
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustResize"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-
+        <activity
+            android:name=".activities.AddTreatmentActivity"
+            android:label="@string/add_treatment" />
         <activity
             android:name=".activities.PatientHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -36,7 +38,7 @@
             android:label="Profile" />
         <activity
             android:name=".activities.RequestReportActivity"
-            android:label="Request Report" />
+            android:label="@string/request_report" />
         <activity
             android:name=".activities.DoctorHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -48,6 +50,7 @@
             android:theme="@style/AppTheme.CustomNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

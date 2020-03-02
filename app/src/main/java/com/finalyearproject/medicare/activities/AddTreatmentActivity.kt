@@ -11,12 +11,13 @@ import android.view.SurfaceHolder
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.finalyearproject.medicare.R
-import com.finalyearproject.medicare.helpers.AppAlerts
-import com.finalyearproject.medicare.helpers.AppProgressDialog
-import com.finalyearproject.medicare.helpers.AppSharedPreference
-import com.finalyearproject.medicare.helpers.Constants
+import com.finalyearproject.medicare.adapters.MedicineAdapter
+import com.finalyearproject.medicare.helpers.*
+import com.finalyearproject.medicare.models.Medicine
 import com.finalyearproject.medicare.models.ResponseModel
+import com.finalyearproject.medicare.models.Treatment
 import com.finalyearproject.medicare.models.User
 import com.finalyearproject.medicare.retrofit.AuthService
 import com.finalyearproject.medicare.retrofit.DoctorServiceApi
@@ -26,35 +27,101 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_request_report.*
+import kotlinx.android.synthetic.main.activity_add_treatment.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RequestReportActivity : AppCompatActivity() {
+class AddTreatmentActivity : AppCompatActivity() {
 
-    var mRequestData: JsonObject = JsonObject()
+    lateinit var mTreatment: Treatment
     lateinit var requestInterface: DoctorServiceApi
-    lateinit var userRequestInterface: AuthService
+    private lateinit var userRequestInterface: AuthService
     lateinit var mDialog: AppProgressDialog
 
-    private var patientId: String? = ""
+    private val mMedicineList = ArrayList<Medicine>()
+    private val mMedicineAdapter = MedicineAdapter(this@AddTreatmentActivity, mMedicineList)
 
+    private var patientId: String? = ""
     private var barcodeDetector: BarcodeDetector? = null
     private var cameraSource: CameraSource? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_request_report)
+        setContentView(R.layout.activity_add_treatment)
 
         mDialog = AppProgressDialog(this)
-        //setDebugData()
 
-        request_report_button.setOnClickListener {
+        initView()
+    }
+
+    private fun initView() {
+        scan_barcode_surface.setOnClickListener {
+            scanningView.startAnimation()
+            cameraSource!!.start(scan_barcode_surface!!.holder)
+        }
+
+        medicine_recycler_view.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@AddTreatmentActivity)
+            adapter = mMedicineAdapter
+        }
+
+        val validDose = arrayListOf<String>(
+            "0001",
+            "0010",
+            "0100",
+            "1000",
+            "0011",
+            "0110",
+            "1100",
+            "1001",
+            "1010",
+            "0101",
+            "0111",
+            "1110",
+            "1101",
+            "1011",
+            "1111"
+        )
+
+        add_medicine_image_view.setOnClickListener {
+            medicine_name_layout.isErrorEnabled = false
+            medicine_dose_layout.isErrorEnabled = false
+            medicine_time_layout.isErrorEnabled = false
+
+            when {
+                medicine_name_edit_text.text.toString().isEmpty() -> {
+                    medicine_name_layout.error = "Enter medicine name"
+                    medicine_name_edit_text.requestFocus()
+                }
+                !validDose.contains(medicine_dose_edit_text.text.toString()) -> {
+                    medicine_dose_layout.error = "Enter valid dose"
+                    medicine_dose_edit_text.requestFocus()
+                }
+                medicine_time_edit_text.text.toString().isEmpty() -> {
+                    medicine_time_layout.error = "Enter medicine time"
+                    medicine_time_edit_text.requestFocus()
+                }
+                else -> {
+                    mMedicineList.add(
+                        Medicine(
+                            medicine_name_edit_text.text.toString(),
+                            medicine_dose_edit_text.text.toString(),
+                            medicine_time_edit_text.text.toString()
+                        )
+                    )
+                    medicine_name_edit_text.text!!.clear()
+                    medicine_dose_edit_text.text!!.clear()
+                    medicine_time_edit_text.text!!.clear()
+                    medicine_name_edit_text.requestFocus()
+                    mMedicineAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+
+        add_treatment_to_server_button.setOnClickListener {
             if (getValidData()) {
-                mDialog.show("Report Requesting...")
                 AppAlerts().showAlertWithAction(
                     this,
                     "Confirm",
@@ -62,54 +129,99 @@ class RequestReportActivity : AppCompatActivity() {
                     "Yes",
                     "Edit Something!",
                     DialogInterface.OnClickListener { dialog, which ->
-                        requestReportToServer()
+                        addTreatmentToServer()
                     },
                     true
                 )
             }
         }
-
-        scan_barcode_surface.setOnClickListener {
-            scanningView.startAnimation()
-            cameraSource!!.start(scan_barcode_surface!!.holder)
-        }
     }
 
-    private fun requestReportToServer() {
+    private fun addTreatmentToServer() {
+        mDialog.show("Treatment Adding...")
         requestInterface =
             ServiceBuilder.getClient(AppSharedPreference(this).getString(Constants.PREF_API_TOKEN))
                 .create(DoctorServiceApi::class.java)
-        val serverCall = requestInterface.requestReport(mRequestData)
+        val serverCall = requestInterface.addTreatment(mTreatment)
         serverCall.enqueue(object : Callback<ResponseModel> {
             override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
                 mDialog.dismiss()
+                AppAlerts().showAlertMessage(
+                    this@AddTreatmentActivity,
+                    "Error",
+                    "Something is Wrong!"
+                )
             }
 
             override fun onResponse(call: Call<ResponseModel>, response: Response<ResponseModel>) {
                 mDialog.dismiss()
-                if (response.isSuccessful) {
-                    val resData = response.body()
-                    AppAlerts().showAlertMessage(
-                        this@RequestReportActivity,
-                        "",
-                        resData!!.message.toString()
-                    )
-                } else if (response.code() == 409) {
-                    var gson = GsonBuilder().create()
-                    val resData: ResponseModel =
-                        gson.fromJson(response.errorBody()!!.string(), ResponseModel::class.java)
-                    Toast.makeText(
-                        this@RequestReportActivity,
-                        resData.message.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                when (response.code()) {
+                    200 -> {
+                        val resData = response.body()
+                        AppAlerts().showAlertMessage(
+                            this@AddTreatmentActivity,
+                            "",
+                            resData!!.message.toString()
+                        )
+                    }
+                    else -> {
+                        responseErrorHandlerOfCode400(
+                            this@AddTreatmentActivity,
+                            response.errorBody()!!.string()
+                        )
+                    }
                 }
             }
         })
     }
 
+    private fun getValidData(): Boolean {
+        return when {
+            patientId!!.isEmpty() -> {
+                Toast.makeText(this, "Scan the Qr code of patient", Toast.LENGTH_SHORT).show()
+                false
+            }
+            treatment_title_edit_text.text.toString().isEmpty() -> {
+                treatment_title_input_layout.error = "Enter valid treatment title."
+                treatment_title_input_layout.requestFocus()
+                false
+            }
+            treatment_desc_edit_text.text.toString().isEmpty() -> {
+                treatment_desc_input_layout.error = "Enter valid treatment details."
+                treatment_desc_input_layout.requestFocus()
+                false
+            }
+            medical_store_edit_text.text.toString().isEmpty() -> {
+                medical_store_input_layout.error = "Enter valid laboratory email."
+                medical_store_input_layout.requestFocus()
+                false
+            }
+            AppSharedPreference(this).getString(Constants.PREF_USER_TYPE) != Constants.USER_DOCTOR -> {
+                Toast.makeText(this, "You're not a Doctor.", Toast.LENGTH_SHORT).show()
+                false
+            }
+            mMedicineList.size == 0 -> {
+                Toast.makeText(this, "Please add some Medicine.", Toast.LENGTH_SHORT).show()
+                false
+            }
+            else -> {
+                mTreatment = Treatment(
+                    patientId!!,
+                    AppSharedPreference(this).getString(Constants.PREF_USER_ID),
+                    AppSharedPreference(this).getString(Constants.PREF_USER_NAME),
+                    treatment_title_edit_text.text.toString(),
+                    treatment_desc_edit_text.text.toString(),
+                    mMedicineList,
+                    "",
+                    medical_store_edit_text.text.toString(),
+                    Constants.STATUS_PENDING
+                )
+                true
+            }
+        }
+    }
+
     private fun initialiseDetectorsAndSources() {
-        //Toast.makeText(applicationContext, "Barcode scanner started", Toast.LENGTH_SHORT).show()
         barcodeDetector = BarcodeDetector.Builder(this)
             .setBarcodeFormats(Barcode.ALL_FORMATS)
             .build()
@@ -119,20 +231,18 @@ class RequestReportActivity : AppCompatActivity() {
             .build()
         scan_barcode_surface!!.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(holder: SurfaceHolder) {
-                //Toast.makeText(application, "Created.", Toast.LENGTH_SHORT).show()
                 try {
                     if (ActivityCompat.checkSelfPermission(
-                            this@RequestReportActivity,
+                            this@AddTreatmentActivity,
                             Manifest.permission.CAMERA
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
-                        //Toast.makeText(application, "Start.", Toast.LENGTH_SHORT).show()
                         cameraSource!!.start(scan_barcode_surface!!.holder)
                     } else {
                         Toast.makeText(application, "Permission Required..", Toast.LENGTH_SHORT)
                             .show()
                         ActivityCompat.requestPermissions(
-                            this@RequestReportActivity,
+                            this@AddTreatmentActivity,
                             arrayOf(Manifest.permission.CAMERA),
                             1000
                         )
@@ -156,11 +266,6 @@ class RequestReportActivity : AppCompatActivity() {
         })
         barcodeDetector!!.setProcessor(object : Detector.Processor<Barcode?> {
             override fun release() {
-                /*Toast.makeText(
-                    applicationContext,
-                    "To prevent memory leaks barcode scanner has been stopped",
-                    Toast.LENGTH_SHORT
-                ).show()*/
                 Log.d("SCANNER", "To prevent memory leaks barcode scanner has been stopped")
             }
 
@@ -180,54 +285,6 @@ class RequestReportActivity : AppCompatActivity() {
         })
     }
 
-    private fun getValidData(): Boolean {
-        return when {
-            patientId!!.isEmpty() -> {
-                Toast.makeText(this, "Scan the Qr code of patient", Toast.LENGTH_SHORT).show()
-                false
-            }
-            report_title_edit_text.text.toString().isEmpty() -> {
-                report_title_input_layout.error = "Enter valid report title."
-                report_title_input_layout.requestFocus()
-                false
-            }
-            report_desc_edit_text.text.toString().isEmpty() -> {
-                report_desc_input_layout.error = "Enter valid report descrption."
-                report_desc_input_layout.requestFocus()
-                false
-            }
-            laboratory_email_edit_text.text.toString().isEmpty() -> {
-                laboratory_email_input_layout.error = "Enter valid laboratory email."
-                laboratory_email_input_layout.requestFocus()
-                false
-            }
-            AppSharedPreference(this).getString(Constants.PREF_USER_TYPE) != "doctor" -> {
-                Toast.makeText(this, "You're not a Doctor.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            else -> {
-                mRequestData.addProperty("patientId", patientId)
-                mRequestData.addProperty(
-                    "doctorId",
-                    AppSharedPreference(this).getString(Constants.PREF_USER_ID)
-                )
-                mRequestData.addProperty(
-                    "doctorName",
-                    AppSharedPreference(this).getString(Constants.PREF_USER_NAME)
-                )
-                mRequestData.addProperty("reportTitle", report_title_edit_text.text.toString())
-                mRequestData.addProperty("reportDescription", report_desc_edit_text.text.toString())
-                mRequestData.addProperty(
-                    "laboratoryEmail",
-                    laboratory_email_edit_text.text.toString()
-                )
-                mRequestData.addProperty("collectingStatus", "pending")
-
-                true
-            }
-        }
-    }
-
     private fun getUserData(id: String) {
         mDialog.show("Getting Patient Info...")
         userRequestInterface =
@@ -239,7 +296,7 @@ class RequestReportActivity : AppCompatActivity() {
                 mDialog.dismiss()
                 t.printStackTrace()
                 Toast.makeText(
-                    this@RequestReportActivity,
+                    this@AddTreatmentActivity,
                     "Please try again...",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -264,7 +321,7 @@ class RequestReportActivity : AppCompatActivity() {
                     }
                     else -> {
                         Toast.makeText(
-                            this@RequestReportActivity,
+                            this@AddTreatmentActivity,
                             "Please try again...",
                             Toast.LENGTH_SHORT
                         ).show()
