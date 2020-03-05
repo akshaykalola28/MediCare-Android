@@ -13,5 +13,6 @@ data class Treatment(
     @SerializedName("reportId") val reportId: String,
     @SerializedName("medicalStoreEmail") val medicalStoreEmail: String,
     @SerializedName("collectingStatus") val collectingStatus: String,
-    @SerializedName("treatmentId") val treatmentId: String? = null
+    @SerializedName("treatmentId") val treatmentId: String? = null,
+    @SerializedName("date") val date: String? = null
 )

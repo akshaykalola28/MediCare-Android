@@ -1,5 +1,6 @@
 package com.finalyearproject.medicare.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,7 @@ class TreatmentAdapter(
         return mItems.size
     }
 
+    @SuppressLint("DefaultLocale")
     override fun onBindViewHolder(holder: TreatmentViewHolder, position: Int) {
         try {
             holder.itemView.treatment_patient_name.text = mItems[position].patientName
@@ -37,8 +39,8 @@ class TreatmentAdapter(
             holder.itemView.treatment_id.text = mItems[position].treatmentId
             holder.itemView.treatment_desc.text = mItems[position].treatmentDesc
             holder.itemView.treatment_title.text = mItems[position].treatmentTitle
-//        holder.itemView.treatment_date.text = mItems[position].date
-            holder.itemView.collection_status.text = mItems[position].collectingStatus
+            holder.itemView.treatment_date.text = mItems[position].date
+            holder.itemView.collection_status.text = mItems[position].collectingStatus.capitalize()
         } catch (e: Exception) {
             e.printStackTrace()
         }

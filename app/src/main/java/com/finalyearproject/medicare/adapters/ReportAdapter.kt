@@ -1,5 +1,6 @@
 package com.finalyearproject.medicare.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.models.Report
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.item_report.view.*
+import java.util.*
 
 
 open class ReportAdapter(
@@ -37,6 +39,7 @@ open class ReportAdapter(
         return reports.size
     }
 
+    @SuppressLint("DefaultLocale")
     override fun onBindViewHolder(holder: ReportViewHolder, position: Int) {
 
         holder.itemView.report_patient_id_text.text = reports[position].patientId
@@ -47,7 +50,7 @@ open class ReportAdapter(
         holder.itemView.report_desc_text.text = reports[position].reportDescription
         holder.itemView.report_title_text.text = reports[position].reportTitle
         holder.itemView.report_date_text.text = reports[position].date
-        holder.itemView.report_status_text.text = reports[position].collectingStatus
+        holder.itemView.report_status_text.text = reports[position].collectingStatus.capitalize()
 
         requestData.addProperty("patientId", reports[position].patientId)
         requestData.addProperty("reportId", reports[position].reportId.toString())

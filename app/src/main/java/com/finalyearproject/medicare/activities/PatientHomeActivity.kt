@@ -24,6 +24,10 @@ class PatientHomeActivity : AppCompatActivity() {
 
     private fun initViews() {
         text_hello_user_name.text = "Hello, ${AppSharedPreference(this).getString("userName")}"
+
+        medical_history_button.setOnClickListener {
+            startActivity(Intent(this, CheckHistoryActivity::class.java))
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

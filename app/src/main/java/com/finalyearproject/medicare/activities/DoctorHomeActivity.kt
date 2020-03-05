@@ -43,10 +43,6 @@ class DoctorHomeActivity : AppCompatActivity() {
                 UserManagement.userLogOut(this)
                 true
             }
-            R.id.action_request_report -> {
-                startActivity(Intent(this, RequestReportActivity::class.java))
-                true
-            }
             R.id.action_profile -> {
                 startActivity(Intent(this, ProfileActivity::class.java))
                 true

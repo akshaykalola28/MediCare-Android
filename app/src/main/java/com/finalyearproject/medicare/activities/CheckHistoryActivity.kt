@@ -1,6 +1,7 @@
 package com.finalyearproject.medicare.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
@@ -20,6 +21,7 @@ import com.finalyearproject.medicare.models.HistoryModel
 import com.finalyearproject.medicare.models.User
 import com.finalyearproject.medicare.retrofit.AuthService
 import com.finalyearproject.medicare.retrofit.DoctorServiceApi
+import com.finalyearproject.medicare.retrofit.PatientServiceApi
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
@@ -35,6 +37,7 @@ import retrofit2.Response
 class CheckHistoryActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
 
     private lateinit var requestInterface: DoctorServiceApi
+    private lateinit var patientInterface: PatientServiceApi
     private lateinit var userRequestInterface: AuthService
     lateinit var mDialog: AppProgressDialog
 
@@ -55,12 +58,20 @@ class CheckHistoryActivity : AppCompatActivity(), TabLayout.OnTabSelectedListene
         }
     }
 
-    fun getHistoryFromServer() {
+    fun getHistoryFromServer(isPatient: Boolean) {
         mDialog.show()
         requestInterface =
             ServiceBuilder.getClient(AppSharedPreference(this).getString(Constants.PREF_API_TOKEN))
                 .create(DoctorServiceApi::class.java)
-        val serverCall = requestInterface.checkHistoryOfPatient(patientId!!)
+        patientInterface =
+            ServiceBuilder.getClient(AppSharedPreference(this).getString(Constants.PREF_API_TOKEN))
+                .create(PatientServiceApi::class.java)
+
+        val serverCall = if (isPatient)
+            patientInterface.checkHistoryOfPatient(AppSharedPreference(this).getString(Constants.PREF_USER_ID))
+        else
+            requestInterface.checkHistoryOfPatient(patientId!!)
+
         serverCall.enqueue(object : Callback<HistoryModel> {
             override fun onFailure(call: Call<HistoryModel>, t: Throwable) {
                 mDialog.dismiss()
@@ -80,8 +91,27 @@ class CheckHistoryActivity : AppCompatActivity(), TabLayout.OnTabSelectedListene
                         qr_code_relative_layout.visibility = View.GONE
 
                         val adapter = FragmentPagerAdapter(supportFragmentManager)
-                        adapter.addFragment(TreatmentListFragment(resData.treaments), "Treatments")
-                        adapter.addFragment(ReportListFragment(resData.reports), "Reports")
+                        if (!resData.treaments.isNullOrEmpty())
+                            adapter.addFragment(
+                                TreatmentListFragment(resData.treaments),
+                                "Treatments"
+                            )
+                        else
+                            Toast.makeText(
+                                this@CheckHistoryActivity,
+                                "Treatment not found.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        if (!resData.reports.isNullOrEmpty())
+                            adapter.addFragment(ReportListFragment(resData.reports), "Reports")
+                        else
+                            Toast.makeText(
+                                this@CheckHistoryActivity,
+                                "Treatment not found.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
                         view_pager.adapter = adapter
                         tab_layout.setupWithViewPager(view_pager)
                     }
@@ -177,13 +207,15 @@ class CheckHistoryActivity : AppCompatActivity(), TabLayout.OnTabSelectedListene
                 ).show()
             }
 
+            @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 mDialog.dismiss()
                 when {
                     response.isSuccessful -> {
+                        name_layout.visibility = View.VISIBLE
                         val responseData: User = response.body()!!
                         user_name_text.text = "${responseData.firstName} ${responseData.lastName}"
-                        getHistoryFromServer()
+                        getHistoryFromServer(isPatient = false)
                     }
                     response.code() == 401 -> {
                         Snackbar.make(
@@ -210,12 +242,18 @@ class CheckHistoryActivity : AppCompatActivity(), TabLayout.OnTabSelectedListene
 
     override fun onPause() {
         super.onPause()
-        cameraSource!!.release()
+        if (cameraSource != null)
+            cameraSource!!.release()
     }
 
     override fun onResume() {
         super.onResume()
-        initialiseDetectorsAndSources()
+        if (AppSharedPreference(this).getString(Constants.PREF_USER_TYPE) == Constants.USER_PATIENT) {
+            qr_code_relative_layout.visibility = View.GONE
+            getHistoryFromServer(true)
+        } else {
+            initialiseDetectorsAndSources()
+        }
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -227,6 +265,6 @@ class CheckHistoryActivity : AppCompatActivity(), TabLayout.OnTabSelectedListene
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-        view_pager.currentItem = tab!!.position;
+        view_pager.currentItem = tab!!.position
     }
 }

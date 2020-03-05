@@ -15,10 +15,4 @@
         android:orderInCategory="100"
         android:title="Log Out"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_request_report"
-        android:orderInCategory="100"
-        android:title="Request Report"
-        app:showAsAction="collapseActionView" />
 </menu>
