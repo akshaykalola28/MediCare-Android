@@ -22,7 +22,7 @@ import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.helpers.responseErrorHandlerOfCode400
 import com.finalyearproject.medicare.managers.UploadManagement
 import com.finalyearproject.medicare.managers.UserManagement
-import com.finalyearproject.medicare.models.ReportModel
+import com.finalyearproject.medicare.models.Report
 import com.finalyearproject.medicare.models.ResponseModel
 import com.finalyearproject.medicare.retrofit.LabServiceApi
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
@@ -61,19 +61,19 @@ class LabHomeActivity : AppCompatActivity(), ReportAdapter.ReportCallbackInterfa
             ServiceBuilder.getClient(AppSharedPreference(this).getString(Constants.PREF_API_TOKEN))
                 .create(LabServiceApi::class.java)
         val serverCall = requestInterface.getReports(status)
-        serverCall.enqueue(object : Callback<ArrayList<ReportModel>> {
-            override fun onFailure(call: Call<ArrayList<ReportModel>>, t: Throwable) {
+        serverCall.enqueue(object : Callback<ArrayList<Report>> {
+            override fun onFailure(call: Call<ArrayList<Report>>, t: Throwable) {
                 Log.d("CHECK", "Fail $t")
                 mDialog.dismiss()
             }
 
             override fun onResponse(
-                call: Call<ArrayList<ReportModel>>,
-                response: Response<ArrayList<ReportModel>>
+                call: Call<ArrayList<Report>>,
+                response: Response<ArrayList<Report>>
             ) {
                 if (response.code() == 200) {
                     mDialog.dismiss()
-                    val reports: ArrayList<ReportModel> = response.body()!!
+                    val reports: ArrayList<Report> = response.body()!!
 
                     pending_report_recycler.apply {
                         setHasFixedSize(true)

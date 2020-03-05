@@ -31,6 +31,10 @@ class DoctorHomeActivity : AppCompatActivity() {
         add_treatment_button.setOnClickListener {
             startActivity(Intent(this, AddTreatmentActivity::class.java))
         }
+
+        medical_history_button.setOnClickListener {
+            startActivity(Intent(this, CheckHistoryActivity::class.java))
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

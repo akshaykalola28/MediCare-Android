@@ -2,7 +2,7 @@ package com.finalyearproject.medicare.models
 
 import com.google.gson.annotations.SerializedName
 
-data class ReportModel(
+data class Report(
     @SerializedName("reportId") val reportId: Long,
     @SerializedName("reportTitle") val reportTitle: String,
     @SerializedName("doctorId") val doctorId: String,

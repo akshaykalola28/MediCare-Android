@@ -24,6 +24,7 @@
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustResize"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name=".activities.CheckHistoryActivity"></activity>
         <activity
             android:name=".activities.AddTreatmentActivity"
             android:label="@string/add_treatment" />

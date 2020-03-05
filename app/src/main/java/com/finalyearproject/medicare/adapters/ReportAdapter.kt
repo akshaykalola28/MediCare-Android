@@ -8,8 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.finalyearproject.medicare.R
+import com.finalyearproject.medicare.activities.LabHomeActivity
 import com.finalyearproject.medicare.helpers.Constants
-import com.finalyearproject.medicare.models.ReportModel
+import com.finalyearproject.medicare.models.Report
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.item_report.view.*
 
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.item_report.view.*
 open class ReportAdapter(
     var context: Context,
     var fragment: Fragment?,
-    var reports: ArrayList<ReportModel>
+    var reports: ArrayList<Report>
 ) : RecyclerView.Adapter<ReportAdapter.ReportViewHolder>() {
 
     private val requestData = JsonObject()
@@ -37,7 +38,6 @@ open class ReportAdapter(
     }
 
     override fun onBindViewHolder(holder: ReportViewHolder, position: Int) {
-        val report = reports[position]
 
         holder.itemView.report_patient_id_text.text = reports[position].patientId
         holder.itemView.report_doctor_id_text.text = reports[position].doctorId
@@ -52,13 +52,14 @@ open class ReportAdapter(
         requestData.addProperty("patientId", reports[position].patientId)
         requestData.addProperty("reportId", reports[position].reportId.toString())
 
-
-        holder.itemView.setOnClickListener {
-            if (reports[position].collectingStatus == Constants.STATUS_PENDING) {
-                val callback = context as ReportCallbackInterface
-                callback.onAddReportClick(requestData)
-            } else {
-                Toast.makeText(context, "Already Uploaded.", Toast.LENGTH_SHORT).show()
+        if (context is LabHomeActivity) {
+            holder.itemView.setOnClickListener {
+                if (reports[position].collectingStatus == Constants.STATUS_PENDING) {
+                    val callback = context as ReportCallbackInterface
+                    callback.onAddReportClick(requestData)
+                } else {
+                    Toast.makeText(context, "Already Uploaded.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

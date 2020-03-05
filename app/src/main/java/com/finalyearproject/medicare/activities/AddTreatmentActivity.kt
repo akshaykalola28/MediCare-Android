@@ -43,6 +43,7 @@ class AddTreatmentActivity : AppCompatActivity() {
     private val mMedicineAdapter = MedicineAdapter(this@AddTreatmentActivity, mMedicineList)
 
     private var patientId: String? = ""
+    private var patientName: String? = ""
     private var barcodeDetector: BarcodeDetector? = null
     private var cameraSource: CameraSource? = null
 
@@ -211,6 +212,7 @@ class AddTreatmentActivity : AppCompatActivity() {
                     AppSharedPreference(this).getString(Constants.PREF_USER_NAME),
                     treatment_title_edit_text.text.toString(),
                     treatment_desc_edit_text.text.toString(),
+                    patientName!!,
                     mMedicineList,
                     "",
                     medical_store_edit_text.text.toString(),
@@ -308,6 +310,7 @@ class AddTreatmentActivity : AppCompatActivity() {
                     response.isSuccessful -> {
                         val responseData: User = response.body()!!
                         user_name_text.text = "${responseData.firstName} ${responseData.lastName}"
+                        patientName = "${responseData.firstName} ${responseData.lastName}"
                     }
                     response.code() == 401 -> {
                         Snackbar.make(
