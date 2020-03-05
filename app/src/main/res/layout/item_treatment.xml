@@ -153,6 +153,24 @@
                 android:layout_height="wrap_content"
                 android:text="@string/dummy" />
 
+            <TextView
+                style="@style/TextReportItemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/medicines"
+                android:textColor="@color/blackTextColor" />
+
+            <include
+                layout="@layout/item_medicine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/medicine_list"
+                style="@style/TextReportItemData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

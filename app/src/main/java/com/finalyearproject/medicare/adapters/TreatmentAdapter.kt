@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.models.Treatment
@@ -41,6 +42,11 @@ class TreatmentAdapter(
             holder.itemView.treatment_title.text = mItems[position].treatmentTitle
             holder.itemView.treatment_date.text = mItems[position].date
             holder.itemView.collection_status.text = mItems[position].collectingStatus.capitalize()
+            holder.itemView.medicine_list.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context)
+                adapter = MedicineAdapter(context, mItems[position].medicines)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

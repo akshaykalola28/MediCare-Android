@@ -28,9 +28,11 @@
     <string name="treatment_details">Treatment Details</string>
     <string name="medical_store_email">Medical Store Email</string>
     <string name="add_treatment">Add Treatment</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="treatment_id">Treatment Id</string>
     <string name="treatment_date">Date</string>
     <string name="treatment_desc">Treatment Desc</string>
+    <string name="medicines">Medicine List</string>
+    <string name="dose">Dose</string>
+    <string name="time">Time</string>
+    <string name="version">Version %s</string>
 </resources>

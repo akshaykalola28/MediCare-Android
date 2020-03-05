@@ -1,5 +1,7 @@
 package com.finalyearproject.medicare.activities
 
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -23,6 +25,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class ProfileActivity : AppCompatActivity() {
 
     private var requestInterface: AuthService? = null
@@ -35,7 +38,13 @@ class ProfileActivity : AppCompatActivity() {
         setUserBarcode()
 
         user_name_text.text = AppSharedPreference(this).getString(Constants.PREF_USER_NAME)
-
+        try {
+            val pInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
+            val version = pInfo.versionName
+            version_name.text = "Version $version"
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
         mDialog = AppProgressDialog(this)
         mDialog.show()
         getUserData()
