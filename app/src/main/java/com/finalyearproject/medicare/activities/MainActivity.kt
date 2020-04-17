@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(Manifest.permission.CAMERA),
+            arrayOf(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE),
             1000
         )
     }

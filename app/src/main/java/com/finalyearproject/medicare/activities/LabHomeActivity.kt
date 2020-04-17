@@ -26,6 +26,7 @@ import com.finalyearproject.medicare.models.Report
 import com.finalyearproject.medicare.models.ResponseModel
 import com.finalyearproject.medicare.retrofit.LabServiceApi
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
+import com.finalyearproject.medicare.services.DownloadService
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_lab_home.*
 import retrofit2.Call
@@ -42,7 +43,7 @@ class LabHomeActivity : AppCompatActivity(), ReportAdapter.ReportCallbackInterfa
 
     private lateinit var requestInterface: LabServiceApi
     private lateinit var mDialog: AppProgressDialog
-    lateinit var addReportData: JsonObject
+    private lateinit var addReportData: JsonObject
 
     private lateinit var currentPhotoPath: String //save the photo path for upload report
 

@@ -1,19 +1,25 @@
 package com.finalyearproject.medicare.adapters
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.activities.LabHomeActivity
 import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.models.Report
+import com.finalyearproject.medicare.services.DownloadService
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.item_report.view.*
+import java.io.File
 import java.util.*
 
 
@@ -39,6 +45,7 @@ open class ReportAdapter(
         return reports.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("DefaultLocale")
     override fun onBindViewHolder(holder: ReportViewHolder, position: Int) {
 
@@ -54,6 +61,25 @@ open class ReportAdapter(
 
         requestData.addProperty("patientId", reports[position].patientId)
         requestData.addProperty("reportId", reports[position].reportId.toString())
+
+
+        if (reports[position].collectingStatus == Constants.STATUS_DONE) {
+            holder.itemView.file_download_image.visibility = View.VISIBLE
+            holder.itemView.file_download_image.setOnClickListener {
+
+                val a = "/MediCare/dummy"
+                val file = File(File(a).absolutePath)
+                (context as Activity).startService(
+                    DownloadService.getDownloadService(
+                        context,
+                        reports[position].reportLink!!,
+                        file.parent!!
+                    )
+                )
+
+                Log.d("LINK", reports[position].reportLink!!)
+            }
+        }
 
         if (context is LabHomeActivity) {
             holder.itemView.setOnClickListener {

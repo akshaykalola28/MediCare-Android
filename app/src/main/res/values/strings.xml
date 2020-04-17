@@ -34,5 +34,5 @@
     <string name="medicines">Medicine List</string>
     <string name="dose">Dose</string>
     <string name="time">Time</string>
-    <string name="version">Version %s</string>
+    <string name="version">Version</string>
 </resources>

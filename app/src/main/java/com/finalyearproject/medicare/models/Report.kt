@@ -12,5 +12,6 @@ data class Report(
     @SerializedName("reportDescription") val reportDescription: String,
     @SerializedName("date") val date: String,
     @SerializedName("laboratoryEmail") val laboratoryEmail: String,
-    @SerializedName("patientName") val patientName: String
+    @SerializedName("patientName") val patientName: String,
+    @SerializedName("reportLink") val reportLink: String? = null
 )
