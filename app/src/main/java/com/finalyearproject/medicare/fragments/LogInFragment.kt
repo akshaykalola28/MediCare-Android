@@ -126,9 +126,9 @@ class LogInFragment : Fragment() {
                 if (task.isSuccessful) {
                     // Get new Instance ID token
                     val token = task.result?.token
-                    notificationToken = token!!
+                    notificationToken = token ?: ""
                     // Log and toast
-                    Log.d(TAG, token)
+                    Log.d(TAG, notificationToken)
                 }
             }
     }

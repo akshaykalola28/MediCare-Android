@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/_10sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_toStartOf="@id/item_doctor_image"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_doctor_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Doctor Name"
+            android:textSize="@dimen/_14sdp" />
+
+        <TextView
+            android:id="@+id/phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="@string/mobile_no" />
+
+        <TextView
+            android:id="@+id/item_doctor_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="@string/email" />
+    </LinearLayout>
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/item_doctor_image"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/_5sdp" />
+</RelativeLayout>
