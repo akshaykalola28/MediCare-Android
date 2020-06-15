@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.helpers.AppAlerts
-import com.finalyearproject.medicare.helpers.AppProgressDialog
+import com.akshaykalola.skydialog.SkyDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.models.ResponseModel
@@ -38,7 +38,7 @@ class RequestReportActivity : AppCompatActivity() {
     var mRequestData: JsonObject = JsonObject()
     lateinit var requestInterface: DoctorServiceApi
     lateinit var userRequestInterface: AuthService
-    lateinit var mDialog: AppProgressDialog
+    lateinit var mDialog: SkyDialog
 
     private var patientId: String? = ""
 
@@ -49,7 +49,7 @@ class RequestReportActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_request_report)
 
-        mDialog = AppProgressDialog(this)
+        mDialog = SkyDialog(this)
         //setDebugData()
 
         request_report_button.setOnClickListener {

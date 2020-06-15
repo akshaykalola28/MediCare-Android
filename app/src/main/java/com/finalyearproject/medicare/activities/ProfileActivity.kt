@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.finalyearproject.medicare.R
-import com.finalyearproject.medicare.helpers.AppProgressDialog
+import com.akshaykalola.skydialog.SkyDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.models.User
@@ -29,7 +29,7 @@ import retrofit2.Response
 class ProfileActivity : AppCompatActivity() {
 
     private var requestInterface: AuthService? = null
-    private lateinit var mDialog: AppProgressDialog
+    private lateinit var mDialog: SkyDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,7 @@ class ProfileActivity : AppCompatActivity() {
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
-        mDialog = AppProgressDialog(this)
+        mDialog = SkyDialog(this)
         mDialog.show()
         getUserData()
     }

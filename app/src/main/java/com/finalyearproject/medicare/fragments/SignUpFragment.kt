@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.activities.AuthActivity
 import com.finalyearproject.medicare.activities.AuthActivity.Companion.TAG
-import com.finalyearproject.medicare.helpers.AppProgressDialog
+import com.akshaykalola.skydialog.SkyDialog
 import com.finalyearproject.medicare.managers.UploadManagement
 import com.finalyearproject.medicare.models.ResponseModel
 import com.finalyearproject.medicare.models.User
@@ -38,7 +38,7 @@ class SignUpFragment : Fragment() {
 
     private val mNewUser = User()
     private var requestInterface: AuthService? = null
-    var mDialog: AppProgressDialog? = null
+    var mDialog: SkyDialog? = null
 
     private var profileImageLink: String? = null
     private var selectedImageUri: Uri? = null
@@ -62,7 +62,7 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mDialog = AppProgressDialog(context!!)
+        mDialog = SkyDialog(context!!)
 
         backImageButton.setOnClickListener {
             (requireActivity() as AuthActivity).onBackPressed()

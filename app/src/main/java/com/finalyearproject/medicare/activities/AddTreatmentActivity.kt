@@ -12,9 +12,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.akshaykalola.skydialog.SkyDialog
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.adapters.MedicineAdapter
-import com.finalyearproject.medicare.helpers.*
+import com.finalyearproject.medicare.helpers.AppAlerts
+import com.finalyearproject.medicare.helpers.AppSharedPreference
+import com.finalyearproject.medicare.helpers.Constants
+import com.finalyearproject.medicare.helpers.responseErrorHandlerOfCode400
 import com.finalyearproject.medicare.models.Medicine
 import com.finalyearproject.medicare.models.ResponseModel
 import com.finalyearproject.medicare.models.Treatment
@@ -37,7 +41,7 @@ class AddTreatmentActivity : AppCompatActivity() {
     lateinit var mTreatment: Treatment
     lateinit var requestInterface: DoctorServiceApi
     private lateinit var userRequestInterface: AuthService
-    lateinit var mDialog: AppProgressDialog
+    lateinit var mDialog: SkyDialog
 
     private val mMedicineList = ArrayList<Medicine>()
     private val mMedicineAdapter = MedicineAdapter(this@AddTreatmentActivity, mMedicineList)
@@ -51,7 +55,7 @@ class AddTreatmentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_treatment)
 
-        mDialog = AppProgressDialog(this)
+        mDialog = SkyDialog(this)
 
         initView()
     }

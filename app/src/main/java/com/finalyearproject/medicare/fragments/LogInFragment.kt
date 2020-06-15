@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.activities.AuthActivity
 import com.finalyearproject.medicare.activities.AuthActivity.Companion.TAG
-import com.finalyearproject.medicare.helpers.AppProgressDialog
+import com.akshaykalola.skydialog.SkyDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.helpers.hideKeyboard
@@ -35,7 +35,7 @@ class LogInFragment : Fragment() {
 
     private var mRequestData: JsonObject? = JsonObject()
     private var requestInterface: AuthService? = null
-    private var mDialog: AppProgressDialog? = null
+    private var mDialog: SkyDialog? = null
     private lateinit var notificationToken: String
 
     override fun onCreateView(
@@ -49,7 +49,7 @@ class LogInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mDialog = AppProgressDialog(context!!)
+        mDialog = SkyDialog(context!!)
         generateFirebaseNotificationToken()
 
         backImageButton.setOnClickListener {

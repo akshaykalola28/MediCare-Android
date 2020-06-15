@@ -12,11 +12,15 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.akshaykalola.skydialog.SkyDialog
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.adapters.FragmentPagerAdapter
 import com.finalyearproject.medicare.fragments.ReportListFragment
 import com.finalyearproject.medicare.fragments.TreatmentListFragment
-import com.finalyearproject.medicare.helpers.*
+import com.finalyearproject.medicare.helpers.AppAlerts
+import com.finalyearproject.medicare.helpers.AppSharedPreference
+import com.finalyearproject.medicare.helpers.Constants
+import com.finalyearproject.medicare.helpers.responseErrorHandlerOfCode400
 import com.finalyearproject.medicare.models.HistoryModel
 import com.finalyearproject.medicare.models.User
 import com.finalyearproject.medicare.retrofit.AuthService
@@ -39,7 +43,7 @@ class CheckHistoryActivity : AppCompatActivity(), TabLayout.OnTabSelectedListene
     private lateinit var requestInterface: DoctorServiceApi
     private lateinit var patientInterface: PatientServiceApi
     private lateinit var userRequestInterface: AuthService
-    lateinit var mDialog: AppProgressDialog
+    lateinit var mDialog: SkyDialog
 
     private var patientId: String? = ""
 
@@ -50,7 +54,7 @@ class CheckHistoryActivity : AppCompatActivity(), TabLayout.OnTabSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_history)
 
-        mDialog = AppProgressDialog(this)
+        mDialog = SkyDialog(this)
 
         scan_barcode_surface.setOnClickListener {
             scanningView.startAnimation()

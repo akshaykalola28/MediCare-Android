@@ -24,7 +24,8 @@
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustResize"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".activities.DoctorListActivity"></activity>
+        <activity android:name=".activities.DoctorListActivity"
+            android:label="@string/find_doctor"/>
         <activity android:name=".activities.CheckHistoryActivity" />
         <activity
             android:name=".activities.AddTreatmentActivity"

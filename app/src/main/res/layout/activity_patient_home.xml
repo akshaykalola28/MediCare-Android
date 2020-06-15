@@ -95,7 +95,7 @@
                         android:letterSpacing="0.1"
                         android:paddingStart="@dimen/_24sdp"
                         android:paddingEnd="@dimen/_24sdp"
-                        android:text="Check History"
+                        android:text="@string/check_history"
                         android:textColor="#fff"
                         android:textStyle="bold" />
                 </RelativeLayout>
@@ -133,7 +133,7 @@
                         android:letterSpacing="0.1"
                         android:paddingStart="@dimen/_24sdp"
                         android:paddingEnd="@dimen/_24sdp"
-                        android:text="Doctor List"
+                        android:text="@string/find_doctor"
                         android:textColor="#fff"
                         android:textStyle="bold" />
                 </RelativeLayout>

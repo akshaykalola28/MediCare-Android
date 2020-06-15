@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.adapters.DoctorAdapter
-import com.finalyearproject.medicare.helpers.AppProgressDialog
+import com.akshaykalola.skydialog.SkyDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.models.User
@@ -20,13 +20,13 @@ import retrofit2.Response
 class DoctorListActivity : AppCompatActivity() {
 
     private val doctorAdapter = DoctorAdapter()
-    private lateinit var mDialog: AppProgressDialog
+    private lateinit var mDialog: SkyDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_list)
 
-        mDialog = AppProgressDialog(this)
+        mDialog = SkyDialog(this)
         doctor_list_recycler.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@DoctorListActivity)

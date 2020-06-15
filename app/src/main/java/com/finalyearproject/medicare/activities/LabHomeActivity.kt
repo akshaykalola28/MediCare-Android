@@ -14,9 +14,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.akshaykalola.skydialog.SkyDialog
 import com.finalyearproject.medicare.R
 import com.finalyearproject.medicare.adapters.ReportAdapter
-import com.finalyearproject.medicare.helpers.AppProgressDialog
 import com.finalyearproject.medicare.helpers.AppSharedPreference
 import com.finalyearproject.medicare.helpers.Constants
 import com.finalyearproject.medicare.helpers.responseErrorHandlerOfCode400
@@ -26,7 +26,6 @@ import com.finalyearproject.medicare.models.Report
 import com.finalyearproject.medicare.models.ResponseModel
 import com.finalyearproject.medicare.retrofit.LabServiceApi
 import com.finalyearproject.medicare.retrofit.ServiceBuilder
-import com.finalyearproject.medicare.services.DownloadService
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_lab_home.*
 import retrofit2.Call
@@ -42,7 +41,7 @@ import kotlin.math.round
 class LabHomeActivity : AppCompatActivity(), ReportAdapter.ReportCallbackInterface {
 
     private lateinit var requestInterface: LabServiceApi
-    private lateinit var mDialog: AppProgressDialog
+    private lateinit var mDialog: SkyDialog
     private lateinit var addReportData: JsonObject
 
     private lateinit var currentPhotoPath: String //save the photo path for upload report
@@ -51,7 +50,7 @@ class LabHomeActivity : AppCompatActivity(), ReportAdapter.ReportCallbackInterfa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lab_home)
 
-        mDialog = AppProgressDialog(this)
+        mDialog = SkyDialog(this)
         mDialog.show()
         getPendingReports(Constants.STATUS_PENDING)
     }
@@ -72,16 +71,26 @@ class LabHomeActivity : AppCompatActivity(), ReportAdapter.ReportCallbackInterfa
                 call: Call<ArrayList<Report>>,
                 response: Response<ArrayList<Report>>
             ) {
-                if (response.code() == 200) {
-                    mDialog.dismiss()
-                    val reports: ArrayList<Report> = response.body()!!
+                mDialog.dismiss()
+                when (response.code()) {
+                    200 -> {
+                        val reports: ArrayList<Report> = response.body()!!
 
-                    pending_report_recycler.apply {
-                        setHasFixedSize(true)
-                        layoutManager = LinearLayoutManager(this@LabHomeActivity)
-                        adapter = ReportAdapter(this@LabHomeActivity, null, reports)
+                        pending_report_recycler.apply {
+                            setHasFixedSize(true)
+                            layoutManager = LinearLayoutManager(this@LabHomeActivity)
+                            adapter = ReportAdapter(this@LabHomeActivity, null, reports)
+                        }
+                    }
+                    else -> {
+                        Toast.makeText(
+                            this@LabHomeActivity,
+                            "Something is Wrong!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
+
             }
         })
     }
