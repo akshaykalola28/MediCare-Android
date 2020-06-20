@@ -58,7 +58,7 @@ class RequestReportActivity : AppCompatActivity() {
                 AppAlerts().showAlertWithAction(
                     this,
                     "Confirm",
-                    "Do you really want to add treatment?",
+                    "Do you really want to request report?",
                     "Yes",
                     "Edit Something!",
                     DialogInterface.OnClickListener { dialog, which ->
